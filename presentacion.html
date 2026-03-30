@@ -212,6 +212,86 @@
       font-size: 36px; font-weight: 700; letter-spacing: -.02em;
     }
 
+    /* ── Panel lateral de navegación ── */
+    .slide-menu-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 200;
+    }
+    .slide-menu-overlay.is-open { display: block; }
+
+    .slide-menu {
+      position: fixed; top: 0; left: 0; bottom: 0;
+      width: min(22rem, 85vw);
+      background: #16162a;
+      border-right: 1px solid rgba(152,152,224,.2);
+      box-shadow: 4px 0 32px rgba(0,0,0,.5);
+      display: flex; flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform .28s cubic-bezier(.22,1,.36,1);
+      z-index: 201;
+    }
+    .slide-menu.is-open { transform: translateX(0); }
+
+    .slide-menu-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid rgba(152,152,224,.15);
+      flex-shrink: 0;
+    }
+    .slide-menu-header h3 {
+      margin: 0; font-size: 1rem; font-weight: 700;
+      color: rgba(255,255,255,.85); letter-spacing: .02em;
+    }
+    .slide-menu-close {
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,.5); font-size: 1.4rem; line-height: 1;
+      padding: .25rem .4rem; border-radius: .35rem;
+      transition: color .15s, background .15s;
+    }
+    .slide-menu-close:hover { color: #fff; background: rgba(152,152,224,.15); }
+
+    .slide-menu-list {
+      overflow-y: auto; flex: 1;
+      padding: .6rem 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(152,152,224,.3) transparent;
+    }
+    .slide-menu-item {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .6rem 1.25rem;
+      cursor: pointer; border: none; background: none;
+      width: 100%; text-align: left;
+      color: rgba(255,255,255,.6);
+      font-family: inherit; font-size: .92rem; line-height: 1.35;
+      transition: background .15s, color .15s;
+      border-left: 3px solid transparent;
+    }
+    .slide-menu-item:hover {
+      background: rgba(152,152,224,.1); color: rgba(255,255,255,.9);
+    }
+    .slide-menu-item.is-current {
+      color: #9898e0; border-left-color: #9898e0;
+      background: rgba(152,152,224,.12); font-weight: 700;
+    }
+    .slide-menu-item .smi-num {
+      font-size: .78rem; font-variant-numeric: tabular-nums;
+      min-width: 1.6rem; text-align: right;
+      opacity: .5; flex-shrink: 0;
+    }
+    .slide-menu-item.is-current .smi-num { opacity: 1; }
+
+    /* Botón de menú en el nav */
+    .btn-menu {
+      position: absolute; left: 1rem;
+      background: none; border: 1.5px solid rgba(152,152,224,.35);
+      color: rgba(255,255,255,.7); border-radius: .5rem;
+      padding: .45rem .75rem; cursor: pointer; font-size: 1.1rem;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .btn-menu:hover { background: rgba(152,152,224,.15); color: #fff; border-color: #9898e0; }
+
     /* ── Barra de navegación ── */
     .deck-nav {
       position: fixed; left: 0; right: 0; bottom: 0; height: var(--nav-h);
@@ -804,24 +884,92 @@
 </main>
 
 <nav class="deck-nav" aria-label="Navegación entre diapositivas">
+  <button type="button" id="btn-menu" class="btn-menu" aria-label="Abrir índice de diapositivas" aria-expanded="false">☰</button>
   <button type="button" id="btn-prev" aria-label="Diapositiva anterior">← Anterior</button>
   <p class="deck-counter" id="deck-counter" aria-live="polite">
     <span id="counter-current">1</span> / <span id="counter-total">22</span>
   </p>
   <button type="button" id="btn-next" aria-label="Diapositiva siguiente">Siguiente →</button>
 </nav>
+
+<div class="slide-menu-overlay" id="slide-menu-overlay" aria-hidden="true"></div>
+<aside class="slide-menu" id="slide-menu" aria-label="Índice de diapositivas">
+  <div class="slide-menu-header">
+    <h3>Índice</h3>
+    <button class="slide-menu-close" id="btn-menu-close" aria-label="Cerrar índice">✕</button>
+  </div>
+  <div class="slide-menu-list" id="slide-menu-list" role="list"></div>
+</aside>
 </div>
 
 <script>
 (function () {
-  var slides = Array.prototype.slice.call(document.querySelectorAll(".deck .slide"));
-  var total  = slides.length;
-  var i      = 0;
-  var prev   = document.getElementById("btn-prev");
-  var next   = document.getElementById("btn-next");
-  var cur    = document.getElementById("counter-current");
+  var slides  = Array.prototype.slice.call(document.querySelectorAll(".deck .slide"));
+  var total   = slides.length;
+  var i       = 0;
+  var prev    = document.getElementById("btn-prev");
+  var next    = document.getElementById("btn-next");
+  var cur     = document.getElementById("counter-current");
+  var menuBtn = document.getElementById("btn-menu");
+  var menuClose = document.getElementById("btn-menu-close");
+  var overlay = document.getElementById("slide-menu-overlay");
+  var menu    = document.getElementById("slide-menu");
+  var list    = document.getElementById("slide-menu-list");
+
   document.getElementById("counter-total").textContent = String(total);
   slides.forEach(function (el, j) { el.setAttribute("data-sn", String(j + 1)); });
+
+  /* Construir items del índice */
+  var items = [];
+  slides.forEach(function (el, j) {
+    var heading = el.querySelector("h1, h2");
+    var label   = heading ? heading.textContent.trim() : "Diapositiva " + (j + 1);
+    var btn = document.createElement("button");
+    btn.className = "slide-menu-item";
+    btn.setAttribute("role", "listitem");
+    btn.innerHTML = '<span class="smi-num">' + (j + 1) + '</span><span>' + label + '</span>';
+    btn.addEventListener("click", function () { goTo(j); closeMenu(); });
+    list.appendChild(btn);
+    items.push(btn);
+  });
+
+  function updateMenuActive() {
+    items.forEach(function (btn, j) {
+      btn.classList.toggle("is-current", j === i);
+    });
+    /* Scroll al item activo */
+    if (items[i]) {
+      items[i].scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function openMenu() {
+    menu.classList.add("is-open");
+    overlay.classList.add("is-open");
+    overlay.setAttribute("aria-hidden", "false");
+    menuBtn.setAttribute("aria-expanded", "true");
+    updateMenuActive();
+    menuClose.focus();
+  }
+
+  function closeMenu() {
+    menu.classList.remove("is-open");
+    overlay.classList.remove("is-open");
+    overlay.setAttribute("aria-hidden", "true");
+    menuBtn.setAttribute("aria-expanded", "false");
+    menuBtn.focus();
+  }
+
+  menuBtn.addEventListener("click", openMenu);
+  menuClose.addEventListener("click", closeMenu);
+  overlay.addEventListener("click", closeMenu);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && menu.classList.contains("is-open")) { closeMenu(); return; }
+    if (menu.classList.contains("is-open")) return;
+    if (e.key === "ArrowLeft"  || e.key === "PageUp")   { e.preventDefault(); goTo(i - 1); }
+    if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); goTo(i + 1); }
+  });
 
   function goTo(n) {
     if (n < 0 || n >= total) return;
@@ -839,11 +987,6 @@
 
   prev.addEventListener("click", function () { goTo(i - 1); });
   next.addEventListener("click", function () { goTo(i + 1); });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowLeft"  || e.key === "PageUp")   { e.preventDefault(); goTo(i - 1); }
-    if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); goTo(i + 1); }
-  });
 
   var m = /^#slide-(\d+)$/.exec(location.hash);
   goTo(m ? Math.min(Math.max(parseInt(m[1], 10) - 1, 0), total - 1) : 0);
