@@ -323,6 +323,62 @@
       font-weight: 600; color: rgba(255,255,255,.6); min-width: 4.5rem; text-align: center;
     }
     .deck-counter span { color: var(--p); font-weight: 700; }
+
+    /* ── Slide speaker ── */
+    .slide--speaker { justify-content: center; align-items: center; }
+    .speaker-card {
+      display: flex; align-items: center; gap: 3.5rem;
+      background: linear-gradient(135deg, #eeeeff 0%, #f4f4fb 100%);
+      border: 2.5px solid var(--p);
+      border-radius: 1.5rem;
+      padding: 3.5rem 4rem;
+      box-shadow: 0 12px 60px rgba(152,152,224,.22);
+      max-width: 56rem; width: 100%;
+    }
+    .speaker-avatar {
+      width: 9rem; height: 9rem; flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--p);
+      color: #fff;
+      font-size: 2.4rem; font-weight: 800; letter-spacing: .02em;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 28px rgba(152,152,224,.45);
+    }
+    .speaker-info { display: flex; flex-direction: column; gap: 1.4rem; }
+    .speaker-name {
+      margin: 0; font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 800; color: var(--t); letter-spacing: -.02em;
+    }
+    .speaker-roles { display: flex; flex-direction: column; gap: .85rem; }
+    .role-badge {
+      display: inline-flex; align-items: center; gap: .65rem;
+      padding: .65rem 1.2rem; border-radius: 99px;
+      font-size: 1.05rem; font-weight: 600; width: fit-content;
+    }
+    .role-badge--cripto {
+      background: rgba(152,152,224,.15);
+      color: #6060a8;
+      border: 1.5px solid rgba(152,152,224,.4);
+    }
+    .role-badge--base {
+      background: rgba(0,82,255,.08);
+      color: #0052ff;
+      border: 1.5px solid rgba(0,82,255,.25);
+    }
+    .role-logo {
+      object-fit: contain; flex-shrink: 0;
+    }
+    .role-logo--cripto {
+      width: 2rem; height: 2rem;
+      background: #fff;
+      border-radius: 50%;
+      padding: 2px;
+    }
+    .role-logo--base {
+      width: 2rem; height: 2rem;
+      border-radius: .35rem;
+      mix-blend-mode: screen;
+    }
   </style>
 </head>
 <body>
@@ -357,8 +413,28 @@
     </ul>
   </section>
 
-  <!-- ③ EL PROBLEMA -->
-  <!-- ③ QUÉ ES AAVE V3 (antes ⑤) -->
+  <!-- ③ PRESENTACIÓN DEL INSTRUCTOR -->
+  <section class="slide slide--speaker" id="slide-speaker" aria-hidden="true" aria-label="Diapositiva — Presentación">
+    <p class="kicker">Instructor</p>
+    <div class="speaker-card">
+      <div class="speaker-avatar" aria-hidden="true">AR</div>
+      <div class="speaker-info">
+        <h2 class="speaker-name">Andrés RMO</h2>
+        <div class="speaker-roles">
+          <span class="role-badge role-badge--cripto">
+            <img src="assets/criptounam.png" alt="CriptoUNAM" class="role-logo role-logo--cripto">
+            Core Team · CriptoUNAM
+          </span>
+          <span class="role-badge role-badge--base">
+            <img src="assets/base.png" alt="Base" class="role-logo role-logo--base">
+            DevRel Ambassador · Base
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ QUÉ ES AAVE V3 (antes ⑤) -->
   <section class="slide" id="slide-3" aria-hidden="true" aria-label="Diapositiva 3">
     <p class="kicker">Protocolo</p>
     <h2>Qué es Aave V3</h2>
@@ -701,53 +777,58 @@
     <p class="kicker">Diagrama · Arquitectura</p>
     <h2>Cómo se conectan los contratos</h2>
     <figure class="diagram">
-      <svg class="diagram-svg" viewBox="0 0 680 310" xmlns="http://www.w3.org/2000/svg">
+      <svg class="diagram-svg" viewBox="0 0 740 330" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="arch-r" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
             <path d="M0 0 L9 4.5 L0 9Z" fill="#9898e0"/>
           </marker>
-          <marker id="arch-d" markerWidth="9" markerHeight="9" refX="4.5" refY="8" orient="auto">
-            <path d="M0 0 L4.5 9 L9 0Z" fill="#9898e0"/>
-          </marker>
         </defs>
+
         <!-- Usuario -->
-        <rect x="20" y="118" width="110" height="56" rx="10" fill="#fff" stroke="#9898e0" stroke-width="2"/>
-        <text x="75" y="148" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Usuario</text>
-        <text x="75" y="165" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">wallet · tx</text>
-        <!-- Arrow → Pool -->
-        <path d="M 132 146 L 195 146" stroke="#9898e0" stroke-width="2.5" marker-end="url(#arch-r)"/>
-        <!-- Pool -->
-        <rect x="198" y="90" width="160" height="112" rx="12" fill="#eeeeff" stroke="#9898e0" stroke-width="2.5"/>
-        <text x="278" y="133" text-anchor="middle" fill="#9898e0" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
-        <text x="278" y="153" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">supply · borrow</text>
-        <text x="278" y="171" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">repay · withdraw</text>
-        <!-- Pool → aTokens -->
-        <path d="M 278 90 L 278 60 L 390 60 L 390 80" stroke="#9898e0" stroke-width="1.8" fill="none" marker-end="url(#arch-d)"/>
-        <rect x="330" y="82" width="120" height="50" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
-        <text x="390" y="109" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">aTokens</text>
-        <text x="390" y="124" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">depósitos</text>
-        <!-- Pool → Debt tokens -->
-        <path d="M 358 146 L 426 146" stroke="#9898e0" stroke-width="1.8" marker-end="url(#arch-r)"/>
-        <rect x="428" y="120" width="130" height="50" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
-        <text x="493" y="147" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">Debt tokens</text>
-        <text x="493" y="162" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">deuda usuario</text>
-        <!-- Pool → GHO Facilitators -->
-        <path d="M 278 202 L 278 228 L 390 228 L 390 210" stroke="#9898e0" stroke-width="1.8" fill="none"/>
-        <path d="M 390 210 L 390 202" stroke="#9898e0" stroke-width="1.8" marker-end="url(#arch-d)"/>
-        <rect x="330" y="204" width="130" height="50" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
-        <text x="395" y="231" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">GHO Facilitators</text>
-        <text x="395" y="246" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">mint cap / DAO</text>
-        <!-- Oráculos (below pool) -->
-        <path d="M 278 204 L 278 254" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <rect x="198" y="256" width="160" height="46" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
-        <text x="278" y="283" text-anchor="middle" fill="#9898e0" font-size="13" font-weight="600" font-family="DM Sans,sans-serif">Oráculos</text>
-        <!-- PoolAddressesProvider -->
-        <rect x="560" y="118" width="112" height="56" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
-        <text x="616" y="142" text-anchor="middle" fill="#1a1520" font-size="11" font-weight="700" font-family="DM Sans,sans-serif">PoolAddresses</text>
-        <text x="616" y="158" text-anchor="middle" fill="#1a1520" font-size="11" font-weight="700" font-family="DM Sans,sans-serif">Provider</text>
-        <text x="616" y="174" text-anchor="middle" fill="#5c5568" font-size="9" font-family="DM Sans,sans-serif">registro del mercado</text>
-        <path d="M 558 146 L 562 146" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <path d="M 358 160 L 556 160" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <rect x="12" y="122" width="115" height="58" rx="10" fill="#fff" stroke="#9898e0" stroke-width="2"/>
+        <text x="69" y="152" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Usuario</text>
+        <text x="69" y="170" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">wallet · tx</text>
+
+        <!-- Usuario → Pool -->
+        <path d="M 129 151 L 173 151" stroke="#9898e0" stroke-width="2.5" marker-end="url(#arch-r)"/>
+
+        <!-- Pool (centro) -->
+        <rect x="175" y="95" width="165" height="115" rx="12" fill="#eeeeff" stroke="#9898e0" stroke-width="2.5"/>
+        <text x="257" y="142" text-anchor="middle" fill="#9898e0" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
+        <text x="257" y="162" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">supply · borrow</text>
+        <text x="257" y="179" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">repay · withdraw</text>
+
+        <!-- Pool → aTokens (sube y va a la derecha) -->
+        <path d="M 257 95 L 257 50 L 385 50" stroke="#9898e0" stroke-width="1.8" fill="none" marker-end="url(#arch-r)"/>
+        <rect x="387" y="25" width="138" height="52" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
+        <text x="456" y="52" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">aTokens</text>
+        <text x="456" y="68" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">depósitos</text>
+
+        <!-- Pool → Debt tokens (horizontal derecha, nivel medio) -->
+        <path d="M 342 148 L 385 148" stroke="#9898e0" stroke-width="1.8" marker-end="url(#arch-r)"/>
+        <rect x="387" y="122" width="138" height="54" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
+        <text x="456" y="150" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">Debt tokens</text>
+        <text x="456" y="167" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">deuda usuario</text>
+
+        <!-- Pool → GHO Facilitators (baja verticalmente, usa arch-r que rota 90° → apunta abajo) -->
+        <path d="M 257 212 L 257 255" stroke="#9898e0" stroke-width="1.8" marker-end="url(#arch-r)"/>
+        <rect x="175" y="257" width="165" height="54" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
+        <text x="257" y="284" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">GHO Facilitators</text>
+        <text x="257" y="300" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">mint cap / DAO</text>
+
+        <!-- Pool → Oráculos: sale del borde izquierdo del Pool por debajo del Usuario (y=220),
+             gira izquierda a x=77, luego baja a Oráculos — sin cruzar ningún recuadro -->
+        <path d="M 175 220 L 77 220 L 77 253" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="4 3" fill="none" marker-end="url(#arch-r)"/>
+        <rect x="12" y="255" width="130" height="54" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
+        <text x="77" y="284" text-anchor="middle" fill="#9898e0" font-size="13" font-weight="600" font-family="DM Sans,sans-serif">Oráculos</text>
+        <text x="77" y="299" text-anchor="middle" fill="#5c5568" font-size="9" font-family="DM Sans,sans-serif">precios · health factor</text>
+
+        <!-- Debt tokens → PoolAddressesProvider (dashed) -->
+        <path d="M 527 152 L 565 152" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arch-r)"/>
+        <rect x="567" y="112" width="155" height="80" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
+        <text x="644" y="145" text-anchor="middle" fill="#1a1520" font-size="11" font-weight="700" font-family="DM Sans,sans-serif">PoolAddresses</text>
+        <text x="644" y="161" text-anchor="middle" fill="#1a1520" font-size="11" font-weight="700" font-family="DM Sans,sans-serif">Provider</text>
+        <text x="644" y="178" text-anchor="middle" fill="#5c5568" font-size="9" font-family="DM Sans,sans-serif">registro del mercado</text>
       </svg>
       <figcaption>El <em>Pool</em> es el único punto de entrada del usuario. El <em>PoolAddressesProvider</em> conecta los contratos del mercado. Los oráculos alimentan al Pool vía lectura (línea punteada).</figcaption>
     </figure>
