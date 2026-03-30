@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aave V3 en DeFi — Presentación</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    /* Color único: morado Aave #B6509E — fondo blanco */
+    :root {
+      --p:  #b6509e;
+      --ph: #9d4589;
+      --ps: rgba(182, 80, 158, 0.10);
+      --pb: rgba(182, 80, 158, 0.30);
+      --t:  #1a1520;
+      --tm: #5c5568;
+      --nav-h: 4.25rem;
+      --pad-v: clamp(1.5rem, 3vh, 2.25rem);
+      --pad-h: clamp(1.5rem, 4vw, 3rem);
+      --slide-h: calc(100vh - var(--nav-h) - var(--pad-v) * 2);
+      --body: clamp(1.2rem, 1.9vw, 1.45rem);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "DM Sans", system-ui, sans-serif;
+      font-size: var(--body);
+      line-height: 1.55;
+      color: var(--t);
+      background: #fff;
+      min-height: 100vh;
+    }
+
+    /* ── Shell ── */
+    .deck-shell { min-height: 100vh; display: flex; flex-direction: column; padding-bottom: var(--nav-h); }
+    .deck {
+      counter-reset: sn;
+      flex: 1;
+      display: flex; align-items: center; justify-content: center;
+      padding: var(--pad-v) clamp(0.75rem, 2vw, 1.5rem);
+    }
+
+    /* ── Slide base ── */
+    .slide {
+      counter-increment: sn;
+      display: none; flex-direction: column;
+      position: relative;
+      width: min(96vw, 74rem);
+      height: var(--slide-h); min-height: var(--slide-h); max-height: var(--slide-h);
+      padding: var(--pad-v) var(--pad-h);
+      padding-right: calc(var(--pad-h) + 3.25rem);
+      overflow: hidden;                   /* sin scroll */
+      border-radius: 1rem;
+      border: 2px solid var(--pb);
+      background: #fff;
+      box-shadow: 0 8px 40px rgba(182,80,158,.1);
+      animation: fadeUp .35s cubic-bezier(.22,1,.36,1);
+    }
+    .slide.is-active { display: flex; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Badge número */
+    .slide::after {
+      content: counter(sn);
+      position: absolute; top: var(--pad-v); right: var(--pad-h);
+      min-width: 2.75rem; height: 2.75rem; padding: 0 .5rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; font-variant-numeric: tabular-nums;
+      color: #fff; border-radius: .5rem;
+      background: var(--p);
+      box-shadow: 0 2px 10px rgba(182,80,158,.35);
+      z-index: 2; pointer-events: none;
+    }
+
+    /* ── Slide de diagrama (sin texto extra, diagrama llena la tarjeta) ── */
+    .slide--diagram {
+      gap: .75rem;
+    }
+    .slide--diagram > figure.diagram {
+      flex: 1;
+      margin: 0;
+      display: flex; flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .slide--diagram .diagram-svg {
+      flex: 1; width: 100%; height: 100%; max-height: none;
+    }
+
+    /* ── Slide de título ── */
+    .slide--title { justify-content: center; gap: .5rem; }
+
+    /* ── Tipografía ── */
+    .kicker {
+      display: inline-block;
+      font-size: clamp(.85rem, 1.3vw, 1rem);
+      font-weight: 700; text-transform: uppercase; letter-spacing: .09em;
+      color: var(--p);
+      padding-bottom: .5rem; margin-bottom: .75rem;
+      position: relative; width: fit-content;
+    }
+    .kicker::after {
+      content: ""; position: absolute; left: 0; bottom: 0;
+      width: 2.5rem; height: 3px; border-radius: 2px; background: var(--p);
+    }
+    .slide h1 {
+      font-size: clamp(2.4rem, 5.5vw, 3.6rem);
+      font-weight: 700; line-height: 1.07; color: var(--p);
+      margin-bottom: .75rem;
+    }
+    .slide h2 {
+      font-size: clamp(1.75rem, 3.8vw, 2.6rem);
+      font-weight: 700; line-height: 1.15; color: var(--t);
+      margin-bottom: .9rem;
+    }
+    .slide h3 {
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+      color: var(--p); margin: 1.1rem 0 .5rem;
+    }
+    .lede {
+      font-size: clamp(1.15rem, 2.1vw, 1.4rem);
+      color: var(--tm); line-height: 1.5; margin-bottom: .85rem;
+    }
+    .subtitle {
+      margin-top: .5rem; padding-top: .9rem;
+      border-top: 1px solid var(--pb);
+      color: var(--tm); font-size: .97em; line-height: 1.5;
+    }
+    .slide p { max-width: 52em; }
+
+    /* ── Listas ── */
+    .slide ul, .slide ol { padding-left: 1.35rem; margin-top: .5rem; }
+    .slide li { margin: .5rem 0; padding-left: .35rem; line-height: 1.5; }
+    .slide li::marker { color: var(--p); font-weight: 700; }
+
+    /* ── Actores ── */
+    .actors { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: .5rem; }
+    .actor {
+      padding: .85rem 1rem; border-radius: .65rem;
+      background: var(--ps); border: 1px solid var(--pb);
+    }
+    .actor strong {
+      display: block; font-size: 1rem; font-weight: 700;
+      color: var(--p); margin-bottom: .3rem;
+    }
+    .actor p { font-size: .92em; color: var(--tm); margin: 0; }
+
+    /* ── Dos columnas ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: .75rem; }
+    .col-card {
+      padding: 1.15rem 1.25rem; border-radius: .65rem;
+      background: var(--ps); border: 1.5px solid var(--pb);
+    }
+    .col-card h3 { margin-top: 0 !important; }
+
+    /* ── Diagramas (con texto) ── */
+    .diagram {
+      margin: .9rem 0 0;
+      padding: 1rem;
+      border-radius: .65rem;
+      border: 1px solid var(--pb);
+      background: var(--ps);
+    }
+    .diagram-svg { width: 100%; max-height: 11rem; height: auto; display: block; }
+    .diagram figcaption {
+      font-size: .87em; color: var(--tm);
+      margin-top: .55rem; line-height: 1.45;
+    }
+
+    /* ── Callout ── */
+    .callout {
+      margin: .9rem 0 0; padding: .9rem 1.1rem;
+      border-left: 4px solid var(--p); border-radius: 0 .5rem .5rem 0;
+      background: var(--ps); font-size: .97em; line-height: 1.5;
+    }
+    .callout a { color: var(--p); font-weight: 700; }
+
+    /* ── Blockquote docente ── */
+    blockquote.docente {
+      margin: 1.1rem 0 0; padding: 1rem 1.25rem 1rem 1.3rem;
+      border-left: 4px solid var(--p); border-radius: 0 .6rem .6rem 0;
+      background: var(--ps); font-style: italic; font-size: 1.05em; line-height: 1.5;
+    }
+    blockquote.docente cite {
+      display: block; margin-top: .45rem;
+      font-style: normal; font-size: .8em; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .07em; color: var(--p);
+    }
+
+    /* ── HF bar ── */
+    .hf-bar {
+      display: flex; height: 2.75rem; border-radius: .5rem; overflow: hidden;
+      font-size: .87em; font-weight: 700; line-height: 2.75rem;
+      text-align: center; margin-top: .75rem;
+    }
+    .hf-safe { flex: 2.2; background: var(--p); color: #fff; }
+    .hf-warn { flex: .8; background: #d4a8c8; color: var(--t); }
+    .hf-risk { flex: 1; background: #7a4a6e; color: #fff; }
+
+    /* ── Logo ── */
+    .logo-wrap { margin-bottom: 1.5rem; }
+    .logo-svg { width: min(13rem, 60vw); height: auto; display: block; }
+    .logo-fill { fill: var(--p); }
+    .logo-eye  { fill: #fff; }
+    .logo-text {
+      fill: var(--p);
+      font-family: "DM Sans", system-ui, sans-serif;
+      font-size: 36px; font-weight: 700; letter-spacing: -.02em;
+    }
+
+    /* ── Barra de navegación ── */
+    .deck-nav {
+      position: fixed; left: 0; right: 0; bottom: 0; height: var(--nav-h);
+      display: flex; align-items: center; justify-content: center; gap: 1rem;
+      padding: 0 1rem;
+      background: #fff; border-top: 1px solid var(--pb);
+      box-shadow: 0 -4px 20px rgba(182,80,158,.07);
+      z-index: 100;
+    }
+    .deck-nav button {
+      font-family: inherit; font-size: 1.05rem; font-weight: 700;
+      padding: .6rem 1.4rem; border-radius: .5rem;
+      border: 1.5px solid var(--p); background: var(--p); color: #fff;
+      cursor: pointer;
+      transition: background .15s, transform .15s, box-shadow .2s;
+      box-shadow: 0 3px 12px rgba(182,80,158,.28);
+    }
+    .deck-nav button:hover:not(:disabled) {
+      background: var(--ph); border-color: var(--ph);
+      box-shadow: 0 5px 18px rgba(182,80,158,.35); transform: translateY(-1px);
+    }
+    .deck-nav button:active:not(:disabled) { transform: translateY(0); }
+    .deck-nav button:disabled {
+      opacity: .35; cursor: not-allowed;
+      background: #e8e4ec; color: #9a929e; border-color: #ddd8e0; box-shadow: none;
+    }
+    .deck-counter {
+      font-size: 1rem; font-variant-numeric: tabular-nums;
+      font-weight: 600; color: var(--tm); min-width: 4.5rem; text-align: center;
+    }
+    .deck-counter span { color: var(--p); font-weight: 700; }
+  </style>
+</head>
+<body>
+<div class="deck-shell">
+<main class="deck" id="deck" role="presentation" aria-label="Diapositivas">
+
+  <!-- ① TÍTULO -->
+  <section class="slide slide--title is-active" id="slide-1" aria-hidden="false" aria-label="Diapositiva 1">
+    <div class="logo-wrap">
+      <svg class="logo-svg" viewBox="0 0 210 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path class="logo-fill" d="M34 2C15.3 2 1 16.3 1 35v13h66V35C67 16.3 52.7 2 34 2Z"/>
+        <circle class="logo-eye" cx="20" cy="36" r="7"/>
+        <circle class="logo-eye" cx="48" cy="36" r="7"/>
+        <text class="logo-text" x="82" y="42">aave</text>
+      </svg>
+    </div>
+    <p class="kicker">Primera clase</p>
+    <h1>Aave V3 en DeFi</h1>
+    <p class="lede">Protocolo de lending, tokens y arquitectura del ecosistema.</p>
+    <p class="subtitle">Temas: flujos de supply y borrow · aTokens y debt tokens · AAVE · GHO</p>
+  </section>
+
+  <!-- ② OBJETIVOS -->
+  <section class="slide" id="slide-2" aria-hidden="true" aria-label="Diapositiva 2">
+    <p class="kicker">Objetivos</p>
+    <h2>Al final de esta clase podrás:</h2>
+    <ul>
+      <li>Explicar qué problema resuelve Aave V3 dentro de DeFi.</li>
+      <li>Identificar los cuatro actores del protocolo y su rol.</li>
+      <li>Describir los flujos de <strong>supply, borrow, repay</strong> y <strong>withdraw</strong>.</li>
+      <li>Diferenciar los tokens del ecosistema: <strong>aTokens, debt tokens, AAVE</strong> y <strong>GHO</strong>.</li>
+    </ul>
+  </section>
+
+  <!-- ③ EL PROBLEMA -->
+  <section class="slide" id="slide-3" aria-hidden="true" aria-label="Diapositiva 3">
+    <p class="kicker">Contexto</p>
+    <h2>¿Por qué existe Aave?</h2>
+    <p class="lede">DeFi necesita un mercado donde el capital inactivo genere rendimiento y quien necesite liquidez pueda acceder sin ceder custodia de sus activos.</p>
+    <ul>
+      <li>Los activos en wallets no rinden nada; los <strong>pools de liquidez</strong> cambian eso.</li>
+      <li>Los préstamos se garantizan con <strong>colateral on-chain</strong>, sin identidad crediticia.</li>
+      <li>El sistema usa <strong>oráculos, parámetros de riesgo y liquidaciones</strong> para mantenerse solvente.</li>
+    </ul>
+  </section>
+
+  <!-- ④ DIAGRAMA — Pool de liquidez -->
+  <section class="slide slide--diagram" id="slide-4" aria-hidden="true" aria-label="Diapositiva 4">
+    <p class="kicker">Diagrama · Pool</p>
+    <h2>Cómo fluye el capital</h2>
+    <figure class="diagram">
+      <svg class="diagram-svg" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="a1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+            <path d="M0 0 L9 4.5 L0 9Z" fill="#b6509e"/>
+          </marker>
+          <marker id="a2" markerWidth="9" markerHeight="9" refX="1" refY="4.5" orient="auto">
+            <path d="M9 0 L0 4.5 L9 9Z" fill="#b6509e"/>
+          </marker>
+        </defs>
+        <!-- Suppliers -->
+        <rect x="20" y="80" width="150" height="100" rx="12" fill="#f9f5f8" stroke="#b6509e" stroke-width="2"/>
+        <text x="95" y="122" text-anchor="middle" fill="#1a1520" font-size="15" font-weight="700" font-family="DM Sans,sans-serif">Suppliers</text>
+        <text x="95" y="143" text-anchor="middle" fill="#5c5568" font-size="12" font-family="DM Sans,sans-serif">depositan activos</text>
+        <text x="95" y="162" text-anchor="middle" fill="#b6509e" font-size="12" font-family="DM Sans,sans-serif">← reciben aTokens</text>
+        <!-- Pool -->
+        <rect x="230" y="50" width="180" height="160" rx="14" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
+        <text x="320" y="110" text-anchor="middle" fill="#b6509e" font-size="17" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
+        <text x="320" y="133" text-anchor="middle" fill="#5c5568" font-size="12" font-family="DM Sans,sans-serif">de liquidez</text>
+        <text x="320" y="157" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">reserves · markets</text>
+        <text x="320" y="178" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">interest rate model</text>
+        <!-- Borrowers -->
+        <rect x="470" y="80" width="150" height="100" rx="12" fill="#f9f5f8" stroke="#b6509e" stroke-width="2"/>
+        <text x="545" y="122" text-anchor="middle" fill="#1a1520" font-size="15" font-weight="700" font-family="DM Sans,sans-serif">Borrowers</text>
+        <text x="545" y="143" text-anchor="middle" fill="#5c5568" font-size="12" font-family="DM Sans,sans-serif">aportan colateral</text>
+        <text x="545" y="162" text-anchor="middle" fill="#b6509e" font-size="12" font-family="DM Sans,sans-serif">← reciben deuda</text>
+        <!-- Arrows -->
+        <path d="M174 118 L226 118" stroke="#b6509e" stroke-width="2.5" marker-end="url(#a1)"/>
+        <text x="200" y="111" text-anchor="middle" fill="#b6509e" font-size="11" font-family="DM Sans,sans-serif">supply</text>
+        <path d="M226 142 L174 142" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="5 3" opacity=".6" marker-end="url(#a2)"/>
+        <path d="M414 118 L466 118" stroke="#b6509e" stroke-width="2.5" marker-end="url(#a1)"/>
+        <text x="440" y="111" text-anchor="middle" fill="#b6509e" font-size="11" font-family="DM Sans,sans-serif">borrow</text>
+        <path d="M466 142 L414 142" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="5 3" opacity=".6" marker-end="url(#a2)"/>
+        <!-- Oracles -->
+        <rect x="230" y="240" width="180" height="44" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <text x="320" y="266" text-anchor="middle" fill="#b6509e" font-size="13" font-weight="600" font-family="DM Sans,sans-serif">Oráculos (precios)</text>
+        <path d="M320 238 L320 212" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="338" y="232" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">health factor</text>
+      </svg>
+      <figcaption>Las flechas sólidas son flujos principales; las punteadas representan el retorno de intereses. Los oráculos alimentan el cálculo del health factor de cada posición.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ⑤ QUÉ ES AAVE V3 -->
+  <section class="slide" id="slide-5" aria-hidden="true" aria-label="Diapositiva 5">
+    <p class="kicker">Protocolo</p>
+    <h2>Qué es Aave V3</h2>
+    <p class="lede">Protocolo de liquidez <strong>no custodial</strong>: los usuarios mantienen el control de sus activos en todo momento; los contratos ejecutan la lógica.</p>
+    <ul>
+      <li><strong>Lending y borrowing</strong> sobre pools de liquidez descentralizados.</li>
+      <li><strong>Eficiencia de capital</strong> mejorada: Isolation Mode, E-Mode, portales cross-chain.</li>
+      <li><strong>Gestión de riesgo</strong> con health factor, LTV y liquidation threshold por activo.</li>
+      <li><strong>Ecosistema propio</strong>: gobernanza vía AAVE y stablecoin nativa GHO.</li>
+    </ul>
+    <p class="callout">
+      Referencia técnica completa en <a href="https://aave.com/docs" target="_blank" rel="noopener noreferrer">aave.com/docs</a>: conceptos, contratos, guías de integración y parámetros de mercado.
+    </p>
+  </section>
+
+  <!-- ⑥ ACTORES -->
+  <section class="slide" id="slide-6" aria-hidden="true" aria-label="Diapositiva 6">
+    <p class="kicker">Actores</p>
+    <h2>Actores del sistema</h2>
+    <div class="actors">
+      <div class="actor">
+        <strong>Supplier</strong>
+        <p>Deposita activos en el pool y recibe <strong>aTokens</strong> que acumulan interés en tiempo real.</p>
+      </div>
+      <div class="actor">
+        <strong>Borrower</strong>
+        <p>Aporta colateral y toma prestado otro activo; su deuda queda registrada en <strong>debt tokens</strong>.</p>
+      </div>
+      <div class="actor">
+        <strong>Liquidator</strong>
+        <p>Repaga deuda de posiciones insolventes (HF &lt; 1) y recibe una <strong>bonificación de colateral</strong>.</p>
+      </div>
+      <div class="actor">
+        <strong>Governance</strong>
+        <p>Establece parámetros del protocolo mediante votación de holders de <strong>AAVE</strong> y sus derivados.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑦ DIAGRAMA — Actores -->
+  <section class="slide slide--diagram" id="slide-7" aria-hidden="true" aria-label="Diapositiva 7">
+    <p class="kicker">Diagrama · Actores</p>
+    <h2>Interacción con el Pool</h2>
+    <figure class="diagram">
+      <svg class="diagram-svg" viewBox="0 0 640 310" xmlns="http://www.w3.org/2000/svg">
+        <!-- Pool center -->
+        <ellipse cx="320" cy="155" rx="70" ry="52" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
+        <text x="320" y="150" text-anchor="middle" fill="#b6509e" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
+        <text x="320" y="170" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">Aave V3</text>
+        <!-- Supplier (top-left) -->
+        <rect x="30" y="30" width="140" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <text x="100" y="59" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Supplier</text>
+        <text x="100" y="77" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">supply → aToken</text>
+        <path d="M 170 72 Q 230 90 252 120" stroke="#b6509e" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
+        <!-- Borrower (top-right) -->
+        <rect x="470" y="30" width="140" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <text x="540" y="59" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Borrower</text>
+        <text x="540" y="77" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">colateral → borrow</text>
+        <path d="M 470 72 Q 415 90 388 120" stroke="#b6509e" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
+        <!-- Liquidator (bottom-right) -->
+        <rect x="470" y="225" width="140" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <text x="540" y="254" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Liquidator</text>
+        <text x="540" y="272" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">repaga · recibe bonus</text>
+        <path d="M 470 253 Q 415 220 388 190" stroke="#b6509e" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
+        <!-- Governance (bottom-left) -->
+        <rect x="30" y="225" width="140" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <text x="100" y="254" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Governance</text>
+        <text x="100" y="272" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">fija parámetros</text>
+        <path d="M 170 253 Q 230 220 252 190" stroke="#b6509e" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
+      </svg>
+      <figcaption>Todos los roles interactúan con el mismo contrato <em>Pool</em>. Solo Governance actúa vía votación; los demás lo hacen con transacciones directas.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ⑧ TOKENS -->
+  <section class="slide" id="slide-8" aria-hidden="true" aria-label="Diapositiva 8">
+    <p class="kicker">Tokens</p>
+    <h2>Los cuatro tokens del ecosistema</h2>
+    <p class="lede">Aave no tiene un único token. Cada pieza cubre una función distinta e irreemplazable.</p>
+    <ul>
+      <li><strong>aTokens</strong> — representan depósitos activos; acumulan interés sin hacer nada.</li>
+      <li><strong>Debt tokens</strong> — registran la deuda del usuario; crecen con los intereses.</li>
+      <li><strong>AAVE</strong> — token de gobernanza y seguridad del protocolo.</li>
+      <li><strong>GHO</strong> — stablecoin nativa, sobrecolateralizada y gestionada por la DAO.</li>
+    </ul>
+  </section>
+
+  <!-- ⑨ DIAGRAMA — Mapa de tokens -->
+  <section class="slide slide--diagram" id="slide-9" aria-hidden="true" aria-label="Diapositiva 9">
+    <p class="kicker">Diagrama · Tokens</p>
+    <h2>Un usuario, cuatro tokens</h2>
+    <figure class="diagram">
+      <svg class="diagram-svg" viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg">
+        <!-- User center -->
+        <ellipse cx="320" cy="160" rx="65" ry="48" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
+        <text x="320" y="155" text-anchor="middle" fill="#b6509e" font-size="15" font-weight="700" font-family="DM Sans,sans-serif">Usuario</text>
+        <text x="320" y="174" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">cuenta Aave</text>
+        <!-- aTokens (top-left) -->
+        <rect x="30" y="20" width="170" height="80" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
+        <text x="115" y="52" text-anchor="middle" fill="#b6509e" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">aTokens</text>
+        <text x="115" y="70" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">aUSDC · aWETH · aDAI</text>
+        <text x="115" y="87" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">depósito · interés auto</text>
+        <path d="M 200 90 L 262 138" stroke="#b6509e" stroke-width="1.5" opacity=".7"/>
+        <!-- Debt tokens (top-right) -->
+        <rect x="440" y="20" width="170" height="80" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
+        <text x="525" y="52" text-anchor="middle" fill="#b6509e" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Debt tokens</text>
+        <text x="525" y="70" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">variableDebt · stableDebt</text>
+        <text x="525" y="87" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">deuda · crece con interés</text>
+        <path d="M 440 90 L 378 138" stroke="#b6509e" stroke-width="1.5" opacity=".7"/>
+        <!-- AAVE (bottom-left) -->
+        <rect x="30" y="222" width="170" height="80" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
+        <text x="115" y="255" text-anchor="middle" fill="#b6509e" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">AAVE</text>
+        <text x="115" y="273" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">gobernanza · staking</text>
+        <text x="115" y="290" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">safety module · Umbrella</text>
+        <path d="M 200 232 L 262 182" stroke="#b6509e" stroke-width="1.5" opacity=".7"/>
+        <!-- GHO (bottom-right) -->
+        <rect x="440" y="222" width="170" height="80" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
+        <text x="525" y="255" text-anchor="middle" fill="#b6509e" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">GHO</text>
+        <text x="525" y="273" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">stablecoin · USD-peg</text>
+        <text x="525" y="290" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">mint con colateral</text>
+        <path d="M 440 232 L 378 182" stroke="#b6509e" stroke-width="1.5" opacity=".7"/>
+      </svg>
+      <figcaption>Cada token refleja una relación diferente con el protocolo: activo (aTokens), pasivo (debt tokens), poder (AAVE) y moneda (GHO).</figcaption>
+    </figure>
+  </section>
+
+  <!-- ⑩ aTokens y Debt tokens -->
+  <section class="slide" id="slide-10" aria-hidden="true" aria-label="Diapositiva 10">
+    <p class="kicker">Posiciones</p>
+    <h2>aTokens y Debt tokens</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h3>aTokens — el activo</h3>
+        <ul>
+          <li>Se acuñan 1:1 cuando haces <strong>supply</strong>.</li>
+          <li>Su saldo crece solo: el interés se suma en tiempo real.</li>
+          <li>Ejemplos: <code>aUSDC</code>, <code>aWETH</code>, <code>aAAVE</code>.</li>
+          <li>Quemarlos ejecuta el <strong>withdraw</strong>.</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h3>Debt tokens — el pasivo</h3>
+        <ul>
+          <li>Se acuñan cuando haces <strong>borrow</strong>.</li>
+          <li>Su saldo crece con la tasa de interés del préstamo.</li>
+          <li>No son transferibles; representan la deuda del usuario.</li>
+          <li>Quemarlos requiere el <strong>repay</strong> completo.</li>
+        </ul>
+      </div>
+    </div>
+    <blockquote class="docente">
+      «Los aTokens son tu activo en el protocolo; los debt tokens son tu pasivo. La diferencia entre ambos determina tu posición neta.»
+      <cite>Concepto clave</cite>
+    </blockquote>
+  </section>
+
+  <!-- ⑪ AAVE: gobernanza y seguridad -->
+  <section class="slide" id="slide-11" aria-hidden="true" aria-label="Diapositiva 11">
+    <p class="kicker">AAVE token</p>
+    <h2>AAVE: gobernanza y seguridad</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h3>Gobernanza</h3>
+        <ul>
+          <li>Votar propuestas que modifican parámetros del protocolo.</li>
+          <li>Delegar <em>proposal power</em> o <em>voting power</em> a terceros.</li>
+          <li>Cada cambio relevante pasa por un ciclo de propuesta y votación on-chain.</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h3>Seguridad (Umbrella)</h3>
+        <ul>
+          <li>Staking en el safety module como <em>backstop</em> del protocolo.</li>
+          <li>Ante un evento de déficit, el módulo puede cubrir deuda incobrable.</li>
+          <li>El staking puede generar incentivos adicionales, incluyendo descuentos en GHO.</li>
+        </ul>
+      </div>
+    </div>
+    <blockquote class="docente">
+      «AAVE no es un depósito ni una moneda: es poder político y alineación económica con el protocolo.»
+      <cite>Frase docente</cite>
+    </blockquote>
+  </section>
+
+  <!-- ⑫ GHO -->
+  <section class="slide" id="slide-12" aria-hidden="true" aria-label="Diapositiva 12">
+    <p class="kicker">GHO</p>
+    <h2>GHO: la stablecoin nativa de Aave</h2>
+    <p class="lede">ERC-20 con paridad al dólar, sobrecolateralizada y cuya expansión está parametrizada por la Aave DAO —no por ninguna entidad centralizada.</p>
+    <ul>
+      <li>Se <strong>minta</strong> usando activos suministrados en Aave V3 como colateral (mercados Ethereum).</li>
+      <li>El interés que pagan quienes mintean GHO va al <strong>treasury del Aave DAO</strong>.</li>
+      <li>La emisión está limitada: cada <strong>facilitator</strong> tiene un techo de mint (<em>mint cap</em>) aprobado por gobernanza.</li>
+      <li>Los stakers de AAVE pueden acceder a <strong>tasas reducidas</strong> al mintear GHO.</li>
+    </ul>
+  </section>
+
+  <!-- ⑬ DIAGRAMA — GHO Facilitators -->
+  <section class="slide slide--diagram" id="slide-13" aria-hidden="true" aria-label="Diapositiva 13">
+    <p class="kicker">Diagrama · GHO</p>
+    <h2>Modelo de facilitators</h2>
+    <figure class="diagram">
+      <svg class="diagram-svg" viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="gho-arr" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+            <path d="M0 0 L9 4.5 L0 9Z" fill="#b6509e"/>
+          </marker>
+        </defs>
+        <!-- DAO top -->
+        <rect x="220" y="20" width="200" height="60" rx="12" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
+        <text x="320" y="52" text-anchor="middle" fill="#b6509e" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Aave DAO</text>
+        <text x="320" y="70" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">fija mint cap por facilitator</text>
+        <!-- Arrow down to facilitators -->
+        <path d="M 260 82 L 185 148" stroke="#b6509e" stroke-width="1.8" marker-end="url(#gho-arr)"/>
+        <path d="M 380 82 L 455 148" stroke="#b6509e" stroke-width="1.8" marker-end="url(#gho-arr)"/>
+        <!-- Facilitator A -->
+        <rect x="60" y="152" width="190" height="68" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
+        <text x="155" y="183" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Facilitator A</text>
+        <text x="155" y="203" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">Pool V3 (colateral Aave)</text>
+        <!-- Facilitator B -->
+        <rect x="390" y="152" width="190" height="68" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
+        <text x="485" y="183" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Facilitator B</text>
+        <text x="485" y="203" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">Flash Minter u otro</text>
+        <!-- GHO center-bottom -->
+        <ellipse cx="320" cy="272" rx="68" ry="34" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
+        <text x="320" y="267" text-anchor="middle" fill="#b6509e" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">GHO</text>
+        <text x="320" y="285" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">ERC-20 · USD peg</text>
+        <!-- Arrows facilitators → GHO -->
+        <path d="M 155 222 Q 200 260 255 268" stroke="#b6509e" stroke-width="1.8" fill="none" marker-end="url(#gho-arr)"/>
+        <text x="178" y="255" fill="#b6509e" font-size="10" font-family="DM Sans,sans-serif">mint / burn</text>
+        <path d="M 485 222 Q 440 260 385 268" stroke="#b6509e" stroke-width="1.8" fill="none" marker-end="url(#gho-arr)"/>
+        <text x="424" y="255" fill="#b6509e" font-size="10" font-family="DM Sans,sans-serif">mint / burn</text>
+      </svg>
+      <figcaption>Solo facilitators aprobados por la DAO pueden acuñar o quemar GHO. Cada uno opera dentro de un techo fijo. La expansión de GHO es siempre gobernada.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ⑭ GHO estrategia + AAVE vs GHO -->
+  <section class="slide" id="slide-14" aria-hidden="true" aria-label="Diapositiva 14">
+    <p class="kicker">GHO · Estrategia</p>
+    <h2>GHO y AAVE: roles distintos, ecosistema conectado</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h3>AAVE</h3>
+        <ul>
+          <li>Gobernanza del protocolo.</li>
+          <li>Seguridad vía staking.</li>
+          <li>Incentivos y beneficios en GHO.</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h3>GHO</h3>
+        <ul>
+          <li>Unidad monetaria estable nativa.</li>
+          <li>Intereses de minteo al DAO treasury.</li>
+          <li>Fuente de ingresos sostenible para el protocolo.</li>
+        </ul>
+      </div>
+    </div>
+    <blockquote class="docente">
+      «AAVE decide las reglas; GHO es el activo que el protocolo emite. Son complementarios, no equivalentes.»
+      <cite>Diferencia clave</cite>
+    </blockquote>
+  </section>
+
+  <!-- ⑮ CONTRATOS CLAVE -->
+  <section class="slide" id="slide-15" aria-hidden="true" aria-label="Diapositiva 15">
+    <p class="kicker">Arquitectura</p>
+    <h2>Contratos principales de Aave V3</h2>
+    <ul>
+      <li><strong>Pool</strong> — interfaz única para <code>supply</code>, <code>borrow</code>, <code>repay</code> y <code>withdraw</code>.</li>
+      <li><strong>PoolAddressesProvider</strong> — registro canónico de direcciones del mercado; punto de entrada para integraciones.</li>
+      <li><strong>aTokens / debt tokens</strong> — ERC-20 que representan posiciones activas de cada usuario.</li>
+      <li><strong>Oráculos (Chainlink / Aave Oracle)</strong> — precios en tiempo real para calcular LTV, HF y disparar liquidaciones.</li>
+      <li><strong>GHO Facilitators</strong> — contratos autorizados por governance para mint y burn de GHO dentro de un cap.</li>
+    </ul>
+  </section>
+
+  <!-- ⑯ DIAGRAMA — Arquitectura -->
+  <section class="slide slide--diagram" id="slide-16" aria-hidden="true" aria-label="Diapositiva 16">
+    <p class="kicker">Diagrama · Arquitectura</p>
+    <h2>Cómo se conectan los contratos</h2>
+    <figure class="diagram">
+      <svg class="diagram-svg" viewBox="0 0 680 310" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arch-r" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+            <path d="M0 0 L9 4.5 L0 9Z" fill="#b6509e"/>
+          </marker>
+          <marker id="arch-d" markerWidth="9" markerHeight="9" refX="4.5" refY="8" orient="auto">
+            <path d="M0 0 L4.5 9 L9 0Z" fill="#b6509e"/>
+          </marker>
+        </defs>
+        <!-- Usuario -->
+        <rect x="20" y="118" width="110" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <text x="75" y="148" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Usuario</text>
+        <text x="75" y="165" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">wallet · tx</text>
+        <!-- Arrow → Pool -->
+        <path d="M 132 146 L 195 146" stroke="#b6509e" stroke-width="2.5" marker-end="url(#arch-r)"/>
+        <!-- Pool -->
+        <rect x="198" y="90" width="160" height="112" rx="12" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
+        <text x="278" y="133" text-anchor="middle" fill="#b6509e" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
+        <text x="278" y="153" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">supply · borrow</text>
+        <text x="278" y="171" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">repay · withdraw</text>
+        <!-- Pool → aTokens -->
+        <path d="M 278 90 L 278 60 L 390 60 L 390 80" stroke="#b6509e" stroke-width="1.8" fill="none" marker-end="url(#arch-d)"/>
+        <rect x="330" y="82" width="120" height="50" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <text x="390" y="109" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">aTokens</text>
+        <text x="390" y="124" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">depósitos</text>
+        <!-- Pool → Debt tokens -->
+        <path d="M 358 146 L 426 146" stroke="#b6509e" stroke-width="1.8" marker-end="url(#arch-r)"/>
+        <rect x="428" y="120" width="130" height="50" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <text x="493" y="147" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">Debt tokens</text>
+        <text x="493" y="162" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">deuda usuario</text>
+        <!-- Pool → GHO Facilitators -->
+        <path d="M 278 202 L 278 228 L 390 228 L 390 210" stroke="#b6509e" stroke-width="1.8" fill="none"/>
+        <path d="M 390 210 L 390 202" stroke="#b6509e" stroke-width="1.8" marker-end="url(#arch-d)"/>
+        <rect x="330" y="204" width="130" height="50" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <text x="395" y="231" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">GHO Facilitators</text>
+        <text x="395" y="246" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">mint cap / DAO</text>
+        <!-- Oráculos (below pool) -->
+        <path d="M 278 204 L 278 254" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <rect x="198" y="256" width="160" height="46" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <text x="278" y="283" text-anchor="middle" fill="#b6509e" font-size="13" font-weight="600" font-family="DM Sans,sans-serif">Oráculos</text>
+        <!-- PoolAddressesProvider -->
+        <rect x="560" y="118" width="112" height="56" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <text x="616" y="142" text-anchor="middle" fill="#1a1520" font-size="11" font-weight="700" font-family="DM Sans,sans-serif">PoolAddresses</text>
+        <text x="616" y="158" text-anchor="middle" fill="#1a1520" font-size="11" font-weight="700" font-family="DM Sans,sans-serif">Provider</text>
+        <text x="616" y="174" text-anchor="middle" fill="#5c5568" font-size="9" font-family="DM Sans,sans-serif">registro del mercado</text>
+        <path d="M 558 146 L 562 146" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <path d="M 358 160 L 556 160" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="4 3"/>
+      </svg>
+      <figcaption>El <em>Pool</em> es el único punto de entrada del usuario. El <em>PoolAddressesProvider</em> conecta los contratos del mercado. Los oráculos alimentan al Pool vía lectura (línea punteada).</figcaption>
+    </figure>
+  </section>
+
+  <!-- ⑰ HEALTH FACTOR -->
+  <section class="slide" id="slide-17" aria-hidden="true" aria-label="Diapositiva 17">
+    <p class="kicker">Riesgo</p>
+    <h2>Health Factor y liquidación</h2>
+    <p class="lede">El <strong>health factor (HF)</strong> mide la salud de cada posición: es la relación entre el valor del colateral (ponderado) y la deuda acumulada.</p>
+    <div class="hf-bar" role="img" aria-label="Escala de health factor">
+      <span class="hf-safe">HF &gt; 1.5 · seguro</span>
+      <span class="hf-warn">HF 1–1.5 · atención</span>
+      <span class="hf-risk">HF &lt; 1 · liquidable</span>
+    </div>
+    <ul>
+      <li>Si el <strong>valor del colateral baja</strong> o la <strong>deuda sube</strong>, el HF se reduce.</li>
+      <li>Cuando el HF cae por debajo de <strong>1</strong>, cualquier liquidator puede actuar.</li>
+      <li>El liquidator repaga parte de la deuda y recibe colateral equivalente más un <strong>bonus</strong>.</li>
+      <li>El mismo mecanismo protege al protocolo de deuda incobrable en posiciones con GHO.</li>
+    </ul>
+  </section>
+
+  <!-- ⑱ CASO PRÁCTICO — Alice (texto) -->
+  <section class="slide" id="slide-18" aria-hidden="true" aria-label="Diapositiva 18">
+    <p class="kicker">Caso práctico</p>
+    <h2>Flujo completo: Alice en Aave V3</h2>
+    <ol>
+      <li>Alice hace <strong>supply de WETH</strong> → recibe <code>aWETH</code> que gana interés solo.</li>
+      <li>Usa ese colateral para hacer <strong>borrow de USDC</strong> → recibe <code>variableDebtUSDC</code>.</li>
+      <li>Alternativamente, <strong>minta GHO</strong> con su colateral dentro del mint cap del facilitator.</li>
+      <li>Monitorea su <strong>health factor</strong>; si se acerca a 1, puede añadir colateral o repagar deuda.</li>
+      <li>Finalmente hace <strong>repay + withdraw</strong>: quema los debt tokens y recupera su WETH.</li>
+      <li>Si decide participar en gobernanza, hace <strong>staking de AAVE</strong> y gana voting power y acceso a tasas GHO reducidas.</li>
+    </ol>
+  </section>
+
+  <!-- ⑲ DIAGRAMA — Flujo Alice -->
+  <section class="slide slide--diagram" id="slide-19" aria-hidden="true" aria-label="Diapositiva 19">
+    <p class="kicker">Diagrama · Flujo Alice</p>
+    <h2>De supply a borrow, paso a paso</h2>
+    <figure class="diagram">
+      <svg class="diagram-svg" viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="fl-r" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+            <path d="M0 0 L9 4.5 L0 9Z" fill="#b6509e"/>
+          </marker>
+        </defs>
+        <!-- Steps -->
+        <!-- Alice -->
+        <ellipse cx="60" cy="100" rx="46" ry="36" fill="#f5eef3" stroke="#b6509e" stroke-width="2"/>
+        <text x="60" y="95" text-anchor="middle" fill="#b6509e" font-size="13" font-weight="700" font-family="DM Sans,sans-serif">Alice</text>
+        <text x="60" y="113" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">WETH</text>
+        <!-- supply arrow -->
+        <path d="M 108 100 L 160 100" stroke="#b6509e" stroke-width="2" marker-end="url(#fl-r)"/>
+        <text x="134" y="92" text-anchor="middle" fill="#b6509e" font-size="10" font-family="DM Sans,sans-serif">supply</text>
+        <!-- Pool -->
+        <rect x="162" y="68" width="106" height="64" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2.5"/>
+        <text x="215" y="100" text-anchor="middle" fill="#b6509e" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
+        <text x="215" y="118" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">Aave V3</text>
+        <!-- aWETH -->
+        <path d="M 215 68 L 215 44 L 310 44" stroke="#b6509e" stroke-width="1.8" fill="none" marker-end="url(#fl-r)"/>
+        <rect x="312" y="24" width="110" height="40" rx="8" fill="#f5eef3" stroke="#b6509e" stroke-width="1.5"/>
+        <text x="367" y="48" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">aWETH ↑</text>
+        <text x="367" y="30" text-anchor="middle" fill="#5c5568" font-size="9" font-family="DM Sans,sans-serif">crece con interés</text>
+        <!-- borrow arrow -->
+        <path d="M 270 100 L 328 100" stroke="#b6509e" stroke-width="2" marker-end="url(#fl-r)"/>
+        <text x="299" y="92" text-anchor="middle" fill="#b6509e" font-size="10" font-family="DM Sans,sans-serif">borrow</text>
+        <!-- USDC/GHO -->
+        <rect x="330" y="72" width="120" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <text x="390" y="97" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">USDC / GHO</text>
+        <text x="390" y="115" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">debtToken emitido</text>
+        <!-- HF arrow -->
+        <path d="M 452 100 L 510 100" stroke="#b6509e" stroke-width="2" marker-end="url(#fl-r)"/>
+        <text x="481" y="92" text-anchor="middle" fill="#b6509e" font-size="10" font-family="DM Sans,sans-serif">monitorea</text>
+        <!-- HF box -->
+        <rect x="512" y="72" width="116" height="56" rx="10" fill="#f5eef3" stroke="#b6509e" stroke-width="2"/>
+        <text x="570" y="97" text-anchor="middle" fill="#b6509e" font-size="13" font-weight="700" font-family="DM Sans,sans-serif">HF</text>
+        <text x="570" y="115" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">debe ser &gt; 1</text>
+        <!-- AAVE staking (below) -->
+        <text x="340" y="165" text-anchor="middle" fill="#5c5568" font-size="12" font-family="DM Sans,sans-serif" font-style="italic">Opcional: staking de AAVE</text>
+        <path d="M 60 138 Q 60 200 160 200 L 300 200" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="5 3" fill="none" marker-end="url(#fl-r)"/>
+        <rect x="302" y="183" width="150" height="40" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <text x="377" y="208" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="600" font-family="DM Sans,sans-serif">Governance + GHO rate</text>
+      </svg>
+      <figcaption>Flujo principal (sólido): Alice hace supply, recibe colateral tokenizado y toma prestado. La línea punteada muestra la capa de gobernanza y beneficios adicionales.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ⑳ RESUMEN -->
+  <section class="slide" id="slide-20" aria-hidden="true" aria-label="Diapositiva 20">
+    <p class="kicker">Resumen</p>
+    <h2>Cinco ideas para llevarse de esta clase</h2>
+    <ol>
+      <li>Aave V3 es un protocolo de lending <strong>no custodial</strong>: los contratos gobiernan, no una empresa.</li>
+      <li>El contrato <strong>Pool</strong> es el único punto de entrada para todas las operaciones del usuario.</li>
+      <li><strong>aTokens</strong> = depósito productivo; <strong>debt tokens</strong> = deuda que acumula interés.</li>
+      <li><strong>AAVE</strong> = gobernanza y seguridad del protocolo; no es un depósito ni una stablecoin.</li>
+      <li><strong>GHO</strong> = stablecoin nativa sobrecolateralizada, cuya emisión está gobernada y acotada por la DAO.</li>
+    </ol>
+  </section>
+
+  <!-- ㉑ PREGUNTAS -->
+  <section class="slide" id="slide-21" aria-hidden="true" aria-label="Diapositiva 21">
+    <p class="kicker">Cierre</p>
+    <h2>Preguntas de cierre</h2>
+    <ol>
+      <li>¿Cuál es la diferencia entre un <strong>aToken</strong> y un <strong>debt token</strong>?</li>
+      <li>Si el health factor de tu posición cae a 0.9, ¿qué ocurre y por qué?</li>
+      <li>¿Por qué AAVE y GHO no son intercambiables ni cumplen la misma función?</li>
+      <li>¿Qué ventaja estratégica obtiene el Aave DAO al emitir su propia stablecoin?</li>
+    </ol>
+  </section>
+
+  <!-- ㉒ FUENTES -->
+  <section class="slide slide--title" id="slide-22" aria-hidden="true" aria-label="Diapositiva 22">
+    <div class="logo-wrap">
+      <svg class="logo-svg" viewBox="0 0 210 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:min(9rem,45vw)">
+        <path class="logo-fill" d="M34 2C15.3 2 1 16.3 1 35v13h66V35C67 16.3 52.7 2 34 2Z"/>
+        <circle class="logo-eye" cx="20" cy="36" r="7"/>
+        <circle class="logo-eye" cx="48" cy="36" r="7"/>
+        <text class="logo-text" x="82" y="42">aave</text>
+      </svg>
+    </div>
+    <p class="kicker">Fuentes</p>
+    <h2>Documentación oficial</h2>
+    <ul>
+      <li><a href="https://aave.com/docs" target="_blank" rel="noopener noreferrer" style="color:var(--p);font-weight:700">aave.com/docs</a> — conceptos V3/V4, contratos, GHO, gobernanza, Umbrella.</li>
+      <li>Parámetros de mercado en tiempo real: <a href="https://aave.com/docs" target="_blank" rel="noopener noreferrer" style="color:var(--p)">aave.com/docs → Parameters</a>.</li>
+      <li>Seguridad y auditorías: sección <em>Security &amp; Audits</em> del mismo portal.</li>
+    </ul>
+  </section>
+
+</main>
+
+<nav class="deck-nav" aria-label="Navegación entre diapositivas">
+  <button type="button" id="btn-prev" aria-label="Diapositiva anterior">← Anterior</button>
+  <p class="deck-counter" id="deck-counter" aria-live="polite">
+    <span id="counter-current">1</span> / <span id="counter-total">22</span>
+  </p>
+  <button type="button" id="btn-next" aria-label="Diapositiva siguiente">Siguiente →</button>
+</nav>
+</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".deck .slide"));
+  var total  = slides.length;
+  var i      = 0;
+  var prev   = document.getElementById("btn-prev");
+  var next   = document.getElementById("btn-next");
+  var cur    = document.getElementById("counter-current");
+  document.getElementById("counter-total").textContent = String(total);
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    i = n;
+    slides.forEach(function (el, j) {
+      var on = j === i;
+      el.classList.toggle("is-active", on);
+      el.setAttribute("aria-hidden", on ? "false" : "true");
+    });
+    cur.textContent = String(i + 1);
+    prev.disabled = i === 0;
+    next.disabled = i === total - 1;
+    if (history.replaceState) history.replaceState(null, "", "#slide-" + (i + 1));
+  }
+
+  prev.addEventListener("click", function () { goTo(i - 1); });
+  next.addEventListener("click", function () { goTo(i + 1); });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft"  || e.key === "PageUp")   { e.preventDefault(); goTo(i - 1); }
+    if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); goTo(i + 1); }
+  });
+
+  var m = /^#slide-(\d+)$/.exec(location.hash);
+  goTo(m ? Math.min(Math.max(parseInt(m[1], 10) - 1, 0), total - 1) : 0);
+})();
+</script>
+</body>
+</html>
