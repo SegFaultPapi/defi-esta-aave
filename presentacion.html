@@ -8,10 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
   <style>
-    /* Color único: morado Aave #B6509E — fondo blanco */
+    /* Color único: morado Aave #9898E0 — fondo blanco */
     :root {
-      --p:  #b6509e;
-      --ph: #9d4589;
+      --p:  #9898e0;
+      --ph: #7f7fc8;
       --ps: rgba(182, 80, 158, 0.10);
       --pb: rgba(182, 80, 158, 0.30);
       --t:  #1a1520;
@@ -29,7 +29,7 @@
       font-size: var(--body);
       line-height: 1.55;
       color: var(--t);
-      background: #fff;
+      background: #1e1e2e;
       min-height: 100vh;
     }
 
@@ -200,8 +200,8 @@
       text-align: center; margin-top: .75rem;
     }
     .hf-safe { flex: 2.2; background: var(--p); color: #fff; }
-    .hf-warn { flex: .8; background: #d4a8c8; color: var(--t); }
-    .hf-risk { flex: 1; background: #7a4a6e; color: #fff; }
+    .hf-warn { flex: .8; background: #c4c4f0; color: var(--t); }
+    .hf-risk { flex: 1; background: #6060a8; color: #fff; }
 
     /* ── Logo ── */
     .logo-wrap { margin-bottom: 1.5rem; }
@@ -219,8 +219,8 @@
       position: fixed; left: 0; right: 0; bottom: 0; height: var(--nav-h);
       display: flex; align-items: center; justify-content: center; gap: 1rem;
       padding: 0 1rem;
-      background: #fff; border-top: 1px solid var(--pb);
-      box-shadow: 0 -4px 20px rgba(182,80,158,.07);
+      background: #1e1e2e; border-top: 1px solid rgba(152,152,224,.15);
+      box-shadow: 0 -4px 20px rgba(0,0,0,.3);
       z-index: 100;
     }
     .deck-nav button {
@@ -229,20 +229,20 @@
       border: 1.5px solid var(--p); background: var(--p); color: #fff;
       cursor: pointer;
       transition: background .15s, transform .15s, box-shadow .2s;
-      box-shadow: 0 3px 12px rgba(182,80,158,.28);
+      box-shadow: 0 3px 12px rgba(152,152,224,.3);
     }
     .deck-nav button:hover:not(:disabled) {
       background: var(--ph); border-color: var(--ph);
-      box-shadow: 0 5px 18px rgba(182,80,158,.35); transform: translateY(-1px);
+      box-shadow: 0 5px 18px rgba(152,152,224,.4); transform: translateY(-1px);
     }
     .deck-nav button:active:not(:disabled) { transform: translateY(0); }
     .deck-nav button:disabled {
       opacity: .35; cursor: not-allowed;
-      background: #e8e4ec; color: #9a929e; border-color: #ddd8e0; box-shadow: none;
+      background: rgba(152,152,224,.15); color: rgba(255,255,255,.4); border-color: rgba(152,152,224,.2); box-shadow: none;
     }
     .deck-counter {
       font-size: 1rem; font-variant-numeric: tabular-nums;
-      font-weight: 600; color: var(--tm); min-width: 4.5rem; text-align: center;
+      font-weight: 600; color: rgba(255,255,255,.6); min-width: 4.5rem; text-align: center;
     }
     .deck-counter span { color: var(--p); font-weight: 700; }
   </style>
@@ -299,39 +299,39 @@
       <svg class="diagram-svg" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="a1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
-            <path d="M0 0 L9 4.5 L0 9Z" fill="#b6509e"/>
+            <path d="M0 0 L9 4.5 L0 9Z" fill="#9898e0"/>
           </marker>
           <marker id="a2" markerWidth="9" markerHeight="9" refX="1" refY="4.5" orient="auto">
-            <path d="M9 0 L0 4.5 L9 9Z" fill="#b6509e"/>
+            <path d="M9 0 L0 4.5 L9 9Z" fill="#9898e0"/>
           </marker>
         </defs>
         <!-- Suppliers -->
-        <rect x="20" y="80" width="150" height="100" rx="12" fill="#f9f5f8" stroke="#b6509e" stroke-width="2"/>
+        <rect x="20" y="80" width="150" height="100" rx="12" fill="#f4f4fb" stroke="#9898e0" stroke-width="2"/>
         <text x="95" y="122" text-anchor="middle" fill="#1a1520" font-size="15" font-weight="700" font-family="DM Sans,sans-serif">Suppliers</text>
         <text x="95" y="143" text-anchor="middle" fill="#5c5568" font-size="12" font-family="DM Sans,sans-serif">depositan activos</text>
-        <text x="95" y="162" text-anchor="middle" fill="#b6509e" font-size="12" font-family="DM Sans,sans-serif">← reciben aTokens</text>
+        <text x="95" y="162" text-anchor="middle" fill="#9898e0" font-size="12" font-family="DM Sans,sans-serif">← reciben aTokens</text>
         <!-- Pool -->
-        <rect x="230" y="50" width="180" height="160" rx="14" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
-        <text x="320" y="110" text-anchor="middle" fill="#b6509e" font-size="17" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
+        <rect x="230" y="50" width="180" height="160" rx="14" fill="#eeeeff" stroke="#9898e0" stroke-width="2.5"/>
+        <text x="320" y="110" text-anchor="middle" fill="#9898e0" font-size="17" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
         <text x="320" y="133" text-anchor="middle" fill="#5c5568" font-size="12" font-family="DM Sans,sans-serif">de liquidez</text>
         <text x="320" y="157" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">reserves · markets</text>
         <text x="320" y="178" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">interest rate model</text>
         <!-- Borrowers -->
-        <rect x="470" y="80" width="150" height="100" rx="12" fill="#f9f5f8" stroke="#b6509e" stroke-width="2"/>
+        <rect x="470" y="80" width="150" height="100" rx="12" fill="#f4f4fb" stroke="#9898e0" stroke-width="2"/>
         <text x="545" y="122" text-anchor="middle" fill="#1a1520" font-size="15" font-weight="700" font-family="DM Sans,sans-serif">Borrowers</text>
         <text x="545" y="143" text-anchor="middle" fill="#5c5568" font-size="12" font-family="DM Sans,sans-serif">aportan colateral</text>
-        <text x="545" y="162" text-anchor="middle" fill="#b6509e" font-size="12" font-family="DM Sans,sans-serif">← reciben deuda</text>
+        <text x="545" y="162" text-anchor="middle" fill="#9898e0" font-size="12" font-family="DM Sans,sans-serif">← reciben deuda</text>
         <!-- Arrows -->
-        <path d="M174 118 L226 118" stroke="#b6509e" stroke-width="2.5" marker-end="url(#a1)"/>
-        <text x="200" y="111" text-anchor="middle" fill="#b6509e" font-size="11" font-family="DM Sans,sans-serif">supply</text>
-        <path d="M226 142 L174 142" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="5 3" opacity=".6" marker-end="url(#a2)"/>
-        <path d="M414 118 L466 118" stroke="#b6509e" stroke-width="2.5" marker-end="url(#a1)"/>
-        <text x="440" y="111" text-anchor="middle" fill="#b6509e" font-size="11" font-family="DM Sans,sans-serif">borrow</text>
-        <path d="M466 142 L414 142" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="5 3" opacity=".6" marker-end="url(#a2)"/>
+        <path d="M174 118 L226 118" stroke="#9898e0" stroke-width="2.5" marker-end="url(#a1)"/>
+        <text x="200" y="111" text-anchor="middle" fill="#9898e0" font-size="11" font-family="DM Sans,sans-serif">supply</text>
+        <path d="M226 142 L174 142" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="5 3" opacity=".6" marker-end="url(#a2)"/>
+        <path d="M414 118 L466 118" stroke="#9898e0" stroke-width="2.5" marker-end="url(#a1)"/>
+        <text x="440" y="111" text-anchor="middle" fill="#9898e0" font-size="11" font-family="DM Sans,sans-serif">borrow</text>
+        <path d="M466 142 L414 142" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="5 3" opacity=".6" marker-end="url(#a2)"/>
         <!-- Oracles -->
-        <rect x="230" y="240" width="180" height="44" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
-        <text x="320" y="266" text-anchor="middle" fill="#b6509e" font-size="13" font-weight="600" font-family="DM Sans,sans-serif">Oráculos (precios)</text>
-        <path d="M320 238 L320 212" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <rect x="230" y="240" width="180" height="44" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
+        <text x="320" y="266" text-anchor="middle" fill="#9898e0" font-size="13" font-weight="600" font-family="DM Sans,sans-serif">Oráculos (precios)</text>
+        <path d="M320 238 L320 212" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="4 3"/>
         <text x="338" y="232" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">health factor</text>
       </svg>
       <figcaption>Las flechas sólidas son flujos principales; las punteadas representan el retorno de intereses. Los oráculos alimentan el cálculo del health factor de cada posición.</figcaption>
@@ -385,29 +385,29 @@
     <figure class="diagram">
       <svg class="diagram-svg" viewBox="0 0 640 310" xmlns="http://www.w3.org/2000/svg">
         <!-- Pool center -->
-        <ellipse cx="320" cy="155" rx="70" ry="52" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
-        <text x="320" y="150" text-anchor="middle" fill="#b6509e" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
+        <ellipse cx="320" cy="155" rx="70" ry="52" fill="#eeeeff" stroke="#9898e0" stroke-width="2.5"/>
+        <text x="320" y="150" text-anchor="middle" fill="#9898e0" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
         <text x="320" y="170" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">Aave V3</text>
         <!-- Supplier (top-left) -->
-        <rect x="30" y="30" width="140" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <rect x="30" y="30" width="140" height="56" rx="10" fill="#fff" stroke="#9898e0" stroke-width="2"/>
         <text x="100" y="59" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Supplier</text>
         <text x="100" y="77" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">supply → aToken</text>
-        <path d="M 170 72 Q 230 90 252 120" stroke="#b6509e" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
+        <path d="M 170 72 Q 230 90 252 120" stroke="#9898e0" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
         <!-- Borrower (top-right) -->
-        <rect x="470" y="30" width="140" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <rect x="470" y="30" width="140" height="56" rx="10" fill="#fff" stroke="#9898e0" stroke-width="2"/>
         <text x="540" y="59" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Borrower</text>
         <text x="540" y="77" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">colateral → borrow</text>
-        <path d="M 470 72 Q 415 90 388 120" stroke="#b6509e" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
+        <path d="M 470 72 Q 415 90 388 120" stroke="#9898e0" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
         <!-- Liquidator (bottom-right) -->
-        <rect x="470" y="225" width="140" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <rect x="470" y="225" width="140" height="56" rx="10" fill="#fff" stroke="#9898e0" stroke-width="2"/>
         <text x="540" y="254" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Liquidator</text>
         <text x="540" y="272" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">repaga · recibe bonus</text>
-        <path d="M 470 253 Q 415 220 388 190" stroke="#b6509e" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
+        <path d="M 470 253 Q 415 220 388 190" stroke="#9898e0" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
         <!-- Governance (bottom-left) -->
-        <rect x="30" y="225" width="140" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <rect x="30" y="225" width="140" height="56" rx="10" fill="#fff" stroke="#9898e0" stroke-width="2"/>
         <text x="100" y="254" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Governance</text>
         <text x="100" y="272" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">fija parámetros</text>
-        <path d="M 170 253 Q 230 220 252 190" stroke="#b6509e" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
+        <path d="M 170 253 Q 230 220 252 190" stroke="#9898e0" stroke-width="1.8" fill="none" stroke-dasharray="5 3" opacity=".7"/>
       </svg>
       <figcaption>Todos los roles interactúan con el mismo contrato <em>Pool</em>. Solo Governance actúa vía votación; los demás lo hacen con transacciones directas.</figcaption>
     </figure>
@@ -433,33 +433,33 @@
     <figure class="diagram">
       <svg class="diagram-svg" viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg">
         <!-- User center -->
-        <ellipse cx="320" cy="160" rx="65" ry="48" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
-        <text x="320" y="155" text-anchor="middle" fill="#b6509e" font-size="15" font-weight="700" font-family="DM Sans,sans-serif">Usuario</text>
+        <ellipse cx="320" cy="160" rx="65" ry="48" fill="#eeeeff" stroke="#9898e0" stroke-width="2.5"/>
+        <text x="320" y="155" text-anchor="middle" fill="#9898e0" font-size="15" font-weight="700" font-family="DM Sans,sans-serif">Usuario</text>
         <text x="320" y="174" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">cuenta Aave</text>
         <!-- aTokens (top-left) -->
-        <rect x="30" y="20" width="170" height="80" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
-        <text x="115" y="52" text-anchor="middle" fill="#b6509e" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">aTokens</text>
+        <rect x="30" y="20" width="170" height="80" rx="10" fill="#fff" stroke="#9898e0" stroke-width="1.8"/>
+        <text x="115" y="52" text-anchor="middle" fill="#9898e0" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">aTokens</text>
         <text x="115" y="70" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">aUSDC · aWETH · aDAI</text>
         <text x="115" y="87" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">depósito · interés auto</text>
-        <path d="M 200 90 L 262 138" stroke="#b6509e" stroke-width="1.5" opacity=".7"/>
+        <path d="M 200 90 L 262 138" stroke="#9898e0" stroke-width="1.5" opacity=".7"/>
         <!-- Debt tokens (top-right) -->
-        <rect x="440" y="20" width="170" height="80" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
-        <text x="525" y="52" text-anchor="middle" fill="#b6509e" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Debt tokens</text>
+        <rect x="440" y="20" width="170" height="80" rx="10" fill="#fff" stroke="#9898e0" stroke-width="1.8"/>
+        <text x="525" y="52" text-anchor="middle" fill="#9898e0" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Debt tokens</text>
         <text x="525" y="70" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">variableDebt · stableDebt</text>
         <text x="525" y="87" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">deuda · crece con interés</text>
-        <path d="M 440 90 L 378 138" stroke="#b6509e" stroke-width="1.5" opacity=".7"/>
+        <path d="M 440 90 L 378 138" stroke="#9898e0" stroke-width="1.5" opacity=".7"/>
         <!-- AAVE (bottom-left) -->
-        <rect x="30" y="222" width="170" height="80" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
-        <text x="115" y="255" text-anchor="middle" fill="#b6509e" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">AAVE</text>
+        <rect x="30" y="222" width="170" height="80" rx="10" fill="#fff" stroke="#9898e0" stroke-width="1.8"/>
+        <text x="115" y="255" text-anchor="middle" fill="#9898e0" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">AAVE</text>
         <text x="115" y="273" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">gobernanza · staking</text>
         <text x="115" y="290" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">safety module · Umbrella</text>
-        <path d="M 200 232 L 262 182" stroke="#b6509e" stroke-width="1.5" opacity=".7"/>
+        <path d="M 200 232 L 262 182" stroke="#9898e0" stroke-width="1.5" opacity=".7"/>
         <!-- GHO (bottom-right) -->
-        <rect x="440" y="222" width="170" height="80" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
-        <text x="525" y="255" text-anchor="middle" fill="#b6509e" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">GHO</text>
+        <rect x="440" y="222" width="170" height="80" rx="10" fill="#fff" stroke="#9898e0" stroke-width="1.8"/>
+        <text x="525" y="255" text-anchor="middle" fill="#9898e0" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">GHO</text>
         <text x="525" y="273" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">stablecoin · USD-peg</text>
         <text x="525" y="290" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">mint con colateral</text>
-        <path d="M 440 232 L 378 182" stroke="#b6509e" stroke-width="1.5" opacity=".7"/>
+        <path d="M 440 232 L 378 182" stroke="#9898e0" stroke-width="1.5" opacity=".7"/>
       </svg>
       <figcaption>Cada token refleja una relación diferente con el protocolo: activo (aTokens), pasivo (debt tokens), poder (AAVE) y moneda (GHO).</figcaption>
     </figure>
@@ -544,33 +544,33 @@
       <svg class="diagram-svg" viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="gho-arr" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
-            <path d="M0 0 L9 4.5 L0 9Z" fill="#b6509e"/>
+            <path d="M0 0 L9 4.5 L0 9Z" fill="#9898e0"/>
           </marker>
         </defs>
         <!-- DAO top -->
-        <rect x="220" y="20" width="200" height="60" rx="12" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
-        <text x="320" y="52" text-anchor="middle" fill="#b6509e" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Aave DAO</text>
+        <rect x="220" y="20" width="200" height="60" rx="12" fill="#eeeeff" stroke="#9898e0" stroke-width="2.5"/>
+        <text x="320" y="52" text-anchor="middle" fill="#9898e0" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Aave DAO</text>
         <text x="320" y="70" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">fija mint cap por facilitator</text>
         <!-- Arrow down to facilitators -->
-        <path d="M 260 82 L 185 148" stroke="#b6509e" stroke-width="1.8" marker-end="url(#gho-arr)"/>
-        <path d="M 380 82 L 455 148" stroke="#b6509e" stroke-width="1.8" marker-end="url(#gho-arr)"/>
+        <path d="M 260 82 L 185 148" stroke="#9898e0" stroke-width="1.8" marker-end="url(#gho-arr)"/>
+        <path d="M 380 82 L 455 148" stroke="#9898e0" stroke-width="1.8" marker-end="url(#gho-arr)"/>
         <!-- Facilitator A -->
-        <rect x="60" y="152" width="190" height="68" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
+        <rect x="60" y="152" width="190" height="68" rx="10" fill="#fff" stroke="#9898e0" stroke-width="1.8"/>
         <text x="155" y="183" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Facilitator A</text>
         <text x="155" y="203" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">Pool V3 (colateral Aave)</text>
         <!-- Facilitator B -->
-        <rect x="390" y="152" width="190" height="68" rx="10" fill="#fff" stroke="#b6509e" stroke-width="1.8"/>
+        <rect x="390" y="152" width="190" height="68" rx="10" fill="#fff" stroke="#9898e0" stroke-width="1.8"/>
         <text x="485" y="183" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Facilitator B</text>
         <text x="485" y="203" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">Flash Minter u otro</text>
         <!-- GHO center-bottom -->
-        <ellipse cx="320" cy="272" rx="68" ry="34" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
-        <text x="320" y="267" text-anchor="middle" fill="#b6509e" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">GHO</text>
+        <ellipse cx="320" cy="272" rx="68" ry="34" fill="#eeeeff" stroke="#9898e0" stroke-width="2.5"/>
+        <text x="320" y="267" text-anchor="middle" fill="#9898e0" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">GHO</text>
         <text x="320" y="285" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">ERC-20 · USD peg</text>
         <!-- Arrows facilitators → GHO -->
-        <path d="M 155 222 Q 200 260 255 268" stroke="#b6509e" stroke-width="1.8" fill="none" marker-end="url(#gho-arr)"/>
-        <text x="178" y="255" fill="#b6509e" font-size="10" font-family="DM Sans,sans-serif">mint / burn</text>
-        <path d="M 485 222 Q 440 260 385 268" stroke="#b6509e" stroke-width="1.8" fill="none" marker-end="url(#gho-arr)"/>
-        <text x="424" y="255" fill="#b6509e" font-size="10" font-family="DM Sans,sans-serif">mint / burn</text>
+        <path d="M 155 222 Q 200 260 255 268" stroke="#9898e0" stroke-width="1.8" fill="none" marker-end="url(#gho-arr)"/>
+        <text x="178" y="255" fill="#9898e0" font-size="10" font-family="DM Sans,sans-serif">mint / burn</text>
+        <path d="M 485 222 Q 440 260 385 268" stroke="#9898e0" stroke-width="1.8" fill="none" marker-end="url(#gho-arr)"/>
+        <text x="424" y="255" fill="#9898e0" font-size="10" font-family="DM Sans,sans-serif">mint / burn</text>
       </svg>
       <figcaption>Solo facilitators aprobados por la DAO pueden acuñar o quemar GHO. Cada uno opera dentro de un techo fijo. La expansión de GHO es siempre gobernada.</figcaption>
     </figure>
@@ -625,50 +625,50 @@
       <svg class="diagram-svg" viewBox="0 0 680 310" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="arch-r" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
-            <path d="M0 0 L9 4.5 L0 9Z" fill="#b6509e"/>
+            <path d="M0 0 L9 4.5 L0 9Z" fill="#9898e0"/>
           </marker>
           <marker id="arch-d" markerWidth="9" markerHeight="9" refX="4.5" refY="8" orient="auto">
-            <path d="M0 0 L4.5 9 L9 0Z" fill="#b6509e"/>
+            <path d="M0 0 L4.5 9 L9 0Z" fill="#9898e0"/>
           </marker>
         </defs>
         <!-- Usuario -->
-        <rect x="20" y="118" width="110" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <rect x="20" y="118" width="110" height="56" rx="10" fill="#fff" stroke="#9898e0" stroke-width="2"/>
         <text x="75" y="148" text-anchor="middle" fill="#1a1520" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Usuario</text>
         <text x="75" y="165" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">wallet · tx</text>
         <!-- Arrow → Pool -->
-        <path d="M 132 146 L 195 146" stroke="#b6509e" stroke-width="2.5" marker-end="url(#arch-r)"/>
+        <path d="M 132 146 L 195 146" stroke="#9898e0" stroke-width="2.5" marker-end="url(#arch-r)"/>
         <!-- Pool -->
-        <rect x="198" y="90" width="160" height="112" rx="12" fill="#f5eef3" stroke="#b6509e" stroke-width="2.5"/>
-        <text x="278" y="133" text-anchor="middle" fill="#b6509e" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
+        <rect x="198" y="90" width="160" height="112" rx="12" fill="#eeeeff" stroke="#9898e0" stroke-width="2.5"/>
+        <text x="278" y="133" text-anchor="middle" fill="#9898e0" font-size="16" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
         <text x="278" y="153" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">supply · borrow</text>
         <text x="278" y="171" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">repay · withdraw</text>
         <!-- Pool → aTokens -->
-        <path d="M 278 90 L 278 60 L 390 60 L 390 80" stroke="#b6509e" stroke-width="1.8" fill="none" marker-end="url(#arch-d)"/>
-        <rect x="330" y="82" width="120" height="50" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <path d="M 278 90 L 278 60 L 390 60 L 390 80" stroke="#9898e0" stroke-width="1.8" fill="none" marker-end="url(#arch-d)"/>
+        <rect x="330" y="82" width="120" height="50" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
         <text x="390" y="109" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">aTokens</text>
         <text x="390" y="124" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">depósitos</text>
         <!-- Pool → Debt tokens -->
-        <path d="M 358 146 L 426 146" stroke="#b6509e" stroke-width="1.8" marker-end="url(#arch-r)"/>
-        <rect x="428" y="120" width="130" height="50" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <path d="M 358 146 L 426 146" stroke="#9898e0" stroke-width="1.8" marker-end="url(#arch-r)"/>
+        <rect x="428" y="120" width="130" height="50" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
         <text x="493" y="147" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">Debt tokens</text>
         <text x="493" y="162" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">deuda usuario</text>
         <!-- Pool → GHO Facilitators -->
-        <path d="M 278 202 L 278 228 L 390 228 L 390 210" stroke="#b6509e" stroke-width="1.8" fill="none"/>
-        <path d="M 390 210 L 390 202" stroke="#b6509e" stroke-width="1.8" marker-end="url(#arch-d)"/>
-        <rect x="330" y="204" width="130" height="50" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <path d="M 278 202 L 278 228 L 390 228 L 390 210" stroke="#9898e0" stroke-width="1.8" fill="none"/>
+        <path d="M 390 210 L 390 202" stroke="#9898e0" stroke-width="1.8" marker-end="url(#arch-d)"/>
+        <rect x="330" y="204" width="130" height="50" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
         <text x="395" y="231" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">GHO Facilitators</text>
         <text x="395" y="246" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">mint cap / DAO</text>
         <!-- Oráculos (below pool) -->
-        <path d="M 278 204 L 278 254" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <rect x="198" y="256" width="160" height="46" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
-        <text x="278" y="283" text-anchor="middle" fill="#b6509e" font-size="13" font-weight="600" font-family="DM Sans,sans-serif">Oráculos</text>
+        <path d="M 278 204 L 278 254" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <rect x="198" y="256" width="160" height="46" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
+        <text x="278" y="283" text-anchor="middle" fill="#9898e0" font-size="13" font-weight="600" font-family="DM Sans,sans-serif">Oráculos</text>
         <!-- PoolAddressesProvider -->
-        <rect x="560" y="118" width="112" height="56" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <rect x="560" y="118" width="112" height="56" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
         <text x="616" y="142" text-anchor="middle" fill="#1a1520" font-size="11" font-weight="700" font-family="DM Sans,sans-serif">PoolAddresses</text>
         <text x="616" y="158" text-anchor="middle" fill="#1a1520" font-size="11" font-weight="700" font-family="DM Sans,sans-serif">Provider</text>
         <text x="616" y="174" text-anchor="middle" fill="#5c5568" font-size="9" font-family="DM Sans,sans-serif">registro del mercado</text>
-        <path d="M 558 146 L 562 146" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <path d="M 358 160 L 556 160" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <path d="M 558 146 L 562 146" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <path d="M 358 160 L 556 160" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="4 3"/>
       </svg>
       <figcaption>El <em>Pool</em> es el único punto de entrada del usuario. El <em>PoolAddressesProvider</em> conecta los contratos del mercado. Los oráculos alimentan al Pool vía lectura (línea punteada).</figcaption>
     </figure>
@@ -714,44 +714,44 @@
       <svg class="diagram-svg" viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="fl-r" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
-            <path d="M0 0 L9 4.5 L0 9Z" fill="#b6509e"/>
+            <path d="M0 0 L9 4.5 L0 9Z" fill="#9898e0"/>
           </marker>
         </defs>
         <!-- Steps -->
         <!-- Alice -->
-        <ellipse cx="60" cy="100" rx="46" ry="36" fill="#f5eef3" stroke="#b6509e" stroke-width="2"/>
-        <text x="60" y="95" text-anchor="middle" fill="#b6509e" font-size="13" font-weight="700" font-family="DM Sans,sans-serif">Alice</text>
+        <ellipse cx="60" cy="100" rx="46" ry="36" fill="#eeeeff" stroke="#9898e0" stroke-width="2"/>
+        <text x="60" y="95" text-anchor="middle" fill="#9898e0" font-size="13" font-weight="700" font-family="DM Sans,sans-serif">Alice</text>
         <text x="60" y="113" text-anchor="middle" fill="#5c5568" font-size="11" font-family="DM Sans,sans-serif">WETH</text>
         <!-- supply arrow -->
-        <path d="M 108 100 L 160 100" stroke="#b6509e" stroke-width="2" marker-end="url(#fl-r)"/>
-        <text x="134" y="92" text-anchor="middle" fill="#b6509e" font-size="10" font-family="DM Sans,sans-serif">supply</text>
+        <path d="M 108 100 L 160 100" stroke="#9898e0" stroke-width="2" marker-end="url(#fl-r)"/>
+        <text x="134" y="92" text-anchor="middle" fill="#9898e0" font-size="10" font-family="DM Sans,sans-serif">supply</text>
         <!-- Pool -->
-        <rect x="162" y="68" width="106" height="64" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2.5"/>
-        <text x="215" y="100" text-anchor="middle" fill="#b6509e" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
+        <rect x="162" y="68" width="106" height="64" rx="10" fill="#fff" stroke="#9898e0" stroke-width="2.5"/>
+        <text x="215" y="100" text-anchor="middle" fill="#9898e0" font-size="14" font-weight="700" font-family="DM Sans,sans-serif">Pool</text>
         <text x="215" y="118" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">Aave V3</text>
         <!-- aWETH -->
-        <path d="M 215 68 L 215 44 L 310 44" stroke="#b6509e" stroke-width="1.8" fill="none" marker-end="url(#fl-r)"/>
-        <rect x="312" y="24" width="110" height="40" rx="8" fill="#f5eef3" stroke="#b6509e" stroke-width="1.5"/>
+        <path d="M 215 68 L 215 44 L 310 44" stroke="#9898e0" stroke-width="1.8" fill="none" marker-end="url(#fl-r)"/>
+        <rect x="312" y="24" width="110" height="40" rx="8" fill="#eeeeff" stroke="#9898e0" stroke-width="1.5"/>
         <text x="367" y="48" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">aWETH ↑</text>
         <text x="367" y="30" text-anchor="middle" fill="#5c5568" font-size="9" font-family="DM Sans,sans-serif">crece con interés</text>
         <!-- borrow arrow -->
-        <path d="M 270 100 L 328 100" stroke="#b6509e" stroke-width="2" marker-end="url(#fl-r)"/>
-        <text x="299" y="92" text-anchor="middle" fill="#b6509e" font-size="10" font-family="DM Sans,sans-serif">borrow</text>
+        <path d="M 270 100 L 328 100" stroke="#9898e0" stroke-width="2" marker-end="url(#fl-r)"/>
+        <text x="299" y="92" text-anchor="middle" fill="#9898e0" font-size="10" font-family="DM Sans,sans-serif">borrow</text>
         <!-- USDC/GHO -->
-        <rect x="330" y="72" width="120" height="56" rx="10" fill="#fff" stroke="#b6509e" stroke-width="2"/>
+        <rect x="330" y="72" width="120" height="56" rx="10" fill="#fff" stroke="#9898e0" stroke-width="2"/>
         <text x="390" y="97" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="700" font-family="DM Sans,sans-serif">USDC / GHO</text>
         <text x="390" y="115" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">debtToken emitido</text>
         <!-- HF arrow -->
-        <path d="M 452 100 L 510 100" stroke="#b6509e" stroke-width="2" marker-end="url(#fl-r)"/>
-        <text x="481" y="92" text-anchor="middle" fill="#b6509e" font-size="10" font-family="DM Sans,sans-serif">monitorea</text>
+        <path d="M 452 100 L 510 100" stroke="#9898e0" stroke-width="2" marker-end="url(#fl-r)"/>
+        <text x="481" y="92" text-anchor="middle" fill="#9898e0" font-size="10" font-family="DM Sans,sans-serif">monitorea</text>
         <!-- HF box -->
-        <rect x="512" y="72" width="116" height="56" rx="10" fill="#f5eef3" stroke="#b6509e" stroke-width="2"/>
-        <text x="570" y="97" text-anchor="middle" fill="#b6509e" font-size="13" font-weight="700" font-family="DM Sans,sans-serif">HF</text>
+        <rect x="512" y="72" width="116" height="56" rx="10" fill="#eeeeff" stroke="#9898e0" stroke-width="2"/>
+        <text x="570" y="97" text-anchor="middle" fill="#9898e0" font-size="13" font-weight="700" font-family="DM Sans,sans-serif">HF</text>
         <text x="570" y="115" text-anchor="middle" fill="#5c5568" font-size="10" font-family="DM Sans,sans-serif">debe ser &gt; 1</text>
         <!-- AAVE staking (below) -->
         <text x="340" y="165" text-anchor="middle" fill="#5c5568" font-size="12" font-family="DM Sans,sans-serif" font-style="italic">Opcional: staking de AAVE</text>
-        <path d="M 60 138 Q 60 200 160 200 L 300 200" stroke="#b6509e" stroke-width="1.5" stroke-dasharray="5 3" fill="none" marker-end="url(#fl-r)"/>
-        <rect x="302" y="183" width="150" height="40" rx="8" fill="#fff" stroke="#b6509e" stroke-width="1.5"/>
+        <path d="M 60 138 Q 60 200 160 200 L 300 200" stroke="#9898e0" stroke-width="1.5" stroke-dasharray="5 3" fill="none" marker-end="url(#fl-r)"/>
+        <rect x="302" y="183" width="150" height="40" rx="8" fill="#fff" stroke="#9898e0" stroke-width="1.5"/>
         <text x="377" y="208" text-anchor="middle" fill="#1a1520" font-size="12" font-weight="600" font-family="DM Sans,sans-serif">Governance + GHO rate</text>
       </svg>
       <figcaption>Flujo principal (sólido): Alice hace supply, recibe colateral tokenizado y toma prestado. La línea punteada muestra la capa de gobernanza y beneficios adicionales.</figcaption>
