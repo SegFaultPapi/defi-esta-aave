@@ -36,7 +36,6 @@
     /* ── Shell ── */
     .deck-shell { min-height: 100vh; display: flex; flex-direction: column; padding-bottom: var(--nav-h); }
     .deck {
-      counter-reset: sn;
       flex: 1;
       display: flex; align-items: center; justify-content: center;
       padding: var(--pad-v) clamp(0.75rem, 2vw, 1.5rem);
@@ -44,7 +43,6 @@
 
     /* ── Slide base ── */
     .slide {
-      counter-increment: sn;
       display: none; flex-direction: column;
       position: relative;
       width: min(96vw, 74rem);
@@ -66,7 +64,7 @@
 
     /* Badge número */
     .slide::after {
-      content: counter(sn);
+      content: attr(data-sn);
       position: absolute; top: var(--pad-v); right: var(--pad-h);
       min-width: 2.75rem; height: 2.75rem; padding: 0 .5rem;
       display: flex; align-items: center; justify-content: center;
@@ -822,6 +820,7 @@
   var next   = document.getElementById("btn-next");
   var cur    = document.getElementById("counter-current");
   document.getElementById("counter-total").textContent = String(total);
+  slides.forEach(function (el, j) { el.setAttribute("data-sn", String(j + 1)); });
 
   function goTo(n) {
     if (n < 0 || n >= total) return;
