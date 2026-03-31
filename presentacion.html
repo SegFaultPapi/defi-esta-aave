@@ -325,24 +325,27 @@
     .deck-counter span { color: var(--p); font-weight: 700; }
 
     /* ── Slide speaker ── */
-    .slide--speaker { justify-content: center; align-items: center; }
+    .slide--speaker { justify-content: center; align-items: center; gap: 1.5rem; }
     .speaker-card {
-      display: flex; align-items: center; gap: 3.5rem;
+      display: flex; align-items: center; gap: 4rem;
       background: linear-gradient(135deg, #eeeeff 0%, #f4f4fb 100%);
       border: 2.5px solid var(--p);
       border-radius: 1.5rem;
-      padding: 3.5rem 4rem;
+      padding: 3rem 4rem;
       box-shadow: 0 12px 60px rgba(152,152,224,.22);
-      max-width: 56rem; width: 100%;
+      max-width: 60rem; width: 100%;
     }
     .speaker-avatar {
-      width: 9rem; height: 9rem; flex-shrink: 0;
+      width: 13rem; height: 13rem; flex-shrink: 0;
       border-radius: 50%;
-      background: var(--p);
-      color: #fff;
-      font-size: 2.4rem; font-weight: 800; letter-spacing: .02em;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 6px 28px rgba(152,152,224,.45);
+      overflow: hidden;
+      border: 4px solid var(--p);
+      box-shadow: 0 8px 36px rgba(152,152,224,.5);
+    }
+    .speaker-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block;
     }
     .speaker-info { display: flex; flex-direction: column; gap: 1.4rem; }
     .speaker-name {
@@ -378,6 +381,23 @@
       width: 2rem; height: 2rem;
       border-radius: .35rem;
       mix-blend-mode: screen;
+    }
+    .repo-link {
+      display: inline-flex; align-items: center; gap: .55rem;
+      width: fit-content;
+      padding: .6rem 1.1rem;
+      border-radius: 99px;
+      font-size: 1rem; font-weight: 600;
+      color: var(--t);
+      background: rgba(152,152,224,.12);
+      border: 1.5px solid rgba(152,152,224,.35);
+      text-decoration: none;
+      transition: background .18s, border-color .18s, color .18s;
+    }
+    .repo-link:hover {
+      background: rgba(152,152,224,.25);
+      border-color: var(--p);
+      color: var(--ph);
     }
   </style>
 </head>
@@ -417,7 +437,9 @@
   <section class="slide slide--speaker" id="slide-speaker" aria-hidden="true" aria-label="Diapositiva — Presentación">
     <p class="kicker">Instructor</p>
     <div class="speaker-card">
-      <div class="speaker-avatar" aria-hidden="true">AR</div>
+      <div class="speaker-avatar">
+        <img src="assets/photo_5132379129109393009_x%20(4).jpg" alt="Andrés RMO">
+      </div>
       <div class="speaker-info">
         <h2 class="speaker-name">Andrés RMO</h2>
         <div class="speaker-roles">
@@ -430,6 +452,10 @@
             DevRel Ambassador · Base
           </span>
         </div>
+        <a class="repo-link" href="https://github.com/SegFaultPapi/defi-esta-aave" target="_blank" rel="noopener noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.744 0 .267.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10Z"/></svg>
+          SegFaultPapi/defi-esta-aave
+        </a>
       </div>
     </div>
   </section>
