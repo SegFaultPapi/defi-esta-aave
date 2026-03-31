@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Glosario DeFi · Aave V3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --p:   #9898e0;
+    --ph:  #7f7fc8;
+    --t:   #1a1520;
+    --tm:  #5c5568;
+    --bg:  #1e1e2e;
+    --card:#ffffff;
+    --border: rgba(152,152,224,.22);
+  }
+
+  body {
+    font-family: "DM Sans", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--t);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #16162a 0%, #1e1e2e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+  }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(152,152,224,.12);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: .35rem 1rem;
+    font-size: .82rem; font-weight: 600;
+    color: var(--p);
+    margin-bottom: 1.25rem;
+    letter-spacing: .04em; text-transform: uppercase;
+  }
+  header h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+  }
+  header h1 span { color: var(--p); }
+  header p {
+    margin-top: .75rem;
+    color: rgba(255,255,255,.5);
+    font-size: 1rem;
+    max-width: 42rem;
+    margin-inline: auto;
+  }
+
+  /* ── Buscador ── */
+  .search-wrap {
+    max-width: 36rem;
+    margin: 2.5rem auto 0;
+    position: relative;
+  }
+  .search-wrap svg {
+    position: absolute; left: 1rem; top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,.3);
+    pointer-events: none;
+  }
+  #search {
+    width: 100%;
+    padding: .85rem 1rem .85rem 2.75rem;
+    border-radius: .75rem;
+    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,.06);
+    color: #fff;
+    font-family: inherit; font-size: 1rem;
+    outline: none;
+    transition: border-color .2s, background .2s;
+  }
+  #search::placeholder { color: rgba(255,255,255,.3); }
+  #search:focus {
+    border-color: var(--p);
+    background: rgba(152,152,224,.08);
+  }
+
+  /* ── Filtros de categoría ── */
+  .filters {
+    display: flex; flex-wrap: wrap; gap: .5rem;
+    justify-content: center;
+    padding: 1.75rem 1.5rem .5rem;
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+  .filter-btn {
+    padding: .4rem 1rem;
+    border-radius: 99px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: rgba(255,255,255,.55);
+    font-family: inherit; font-size: .85rem; font-weight: 600;
+    cursor: pointer;
+    transition: all .18s;
+  }
+  .filter-btn:hover { border-color: var(--p); color: var(--p); }
+  .filter-btn.active {
+    background: var(--p); border-color: var(--p);
+    color: #fff;
+  }
+
+  /* ── Grid de términos ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+    gap: 1.25rem;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: 1.5rem 1.5rem 4rem;
+  }
+
+  /* ── Tarjeta ── */
+  .card {
+    background: var(--card);
+    border-radius: 1rem;
+    border: 1.5px solid transparent;
+    padding: 1.5rem 1.6rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: border-color .2s, box-shadow .2s, transform .18s;
+    cursor: default;
+  }
+  .card:hover {
+    border-color: var(--p);
+    box-shadow: 0 8px 32px rgba(152,152,224,.18);
+    transform: translateY(-2px);
+  }
+  .card-top {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: .75rem;
+  }
+  .card h2 {
+    font-size: 1.1rem; font-weight: 800;
+    color: var(--t); letter-spacing: -.01em;
+    line-height: 1.2;
+  }
+  .card-tag {
+    flex-shrink: 0;
+    font-size: .7rem; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
+    padding: .25rem .65rem;
+    border-radius: 99px;
+  }
+  .card p {
+    font-size: .95rem;
+    color: var(--tm);
+    line-height: 1.6;
+  }
+  /* highlight de búsqueda */
+  mark {
+    background: rgba(152,152,224,.3);
+    color: var(--t);
+    border-radius: .2rem;
+    padding: 0 .1rem;
+  }
+
+  /* Colores por categoría */
+  .tag--base    { background: rgba(152,152,224,.12); color: var(--ph); }
+  .tag--tokens  { background: rgba(0,180,100,.1);    color: #0a7a42; }
+  .tag--riesgo  { background: rgba(220,80,60,.1);    color: #b03020; }
+  .tag--gov     { background: rgba(255,160,0,.1);    color: #8a5e00; }
+  .tag--tecnico { background: rgba(0,140,220,.1);    color: #005fa0; }
+
+  /* Estado vacío */
+  .empty {
+    display: none; flex-direction: column; align-items: center;
+    gap: 1rem; text-align: center;
+    grid-column: 1/-1;
+    padding: 4rem 1rem;
+    color: rgba(255,255,255,.35);
+  }
+  .empty svg { opacity: .4; }
+  .empty p { font-size: 1rem; }
+
+  /* Contador */
+  .count-bar {
+    text-align: center;
+    font-size: .85rem;
+    color: rgba(255,255,255,.35);
+    padding: .5rem 1.5rem 0;
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+  .count-bar strong { color: var(--p); }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    header { padding: 2rem 1.25rem 2rem; }
+    .grid { padding: 1rem 1rem 3rem; gap: 1rem; }
+    .card { padding: 1.2rem 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    Aave V3 · Primera clase
+  </div>
+  <h1>Glosario <span>DeFi</span></h1>
+  <p>Definiciones esenciales para entender Aave V3 y el ecosistema de finanzas descentralizadas.</p>
+  <div class="search-wrap">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="search" id="search" placeholder="Buscar término…" autocomplete="off" aria-label="Buscar término en el glosario"/>
+  </div>
+</header>
+
+<div class="filters" id="filters" role="group" aria-label="Filtrar por categoría">
+  <button class="filter-btn active" data-cat="all">Todos</button>
+  <button class="filter-btn" data-cat="base">Fundamentos</button>
+  <button class="filter-btn" data-cat="tokens">Tokens</button>
+  <button class="filter-btn" data-cat="riesgo">Riesgo</button>
+  <button class="filter-btn" data-cat="gov">Gobernanza</button>
+  <button class="filter-btn" data-cat="tecnico">Técnico</button>
+</div>
+
+<p class="count-bar" id="count-bar"><strong id="count-num">19</strong> términos</p>
+
+<div class="grid" id="grid" role="list">
+  <!-- las tarjetas se generan desde JS -->
+  <div class="empty" id="empty" role="status">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <p>Sin resultados para esa búsqueda.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var terms = [
+    {
+      term: "DeFi",
+      def: "Conjunto de aplicaciones financieras construidas sobre blockchain que permiten prestar, pedir prestado, intercambiar y ganar intereses sin intermediarios tradicionales.",
+      cat: "base",
+      tagLabel: "Fundamentos"
+    },
+    {
+      term: "Protocolo (web3)",
+      def: "Conjunto de reglas y contratos inteligentes que definen cómo funciona una aplicación descentralizada en una blockchain.",
+      cat: "base",
+      tagLabel: "Fundamentos"
+    },
+    {
+      term: "No custodial",
+      def: "Servicio en el que el usuario mantiene siempre el control de sus llaves y fondos, sin que una empresa los custodie por él.",
+      cat: "base",
+      tagLabel: "Fundamentos"
+    },
+    {
+      term: "Liquidez",
+      def: "Facilidad con la que un activo puede comprarse o venderse rápidamente sin afectar demasiado su precio.",
+      cat: "base",
+      tagLabel: "Fundamentos"
+    },
+    {
+      term: "Pools de liquidez",
+      def: "Fondos de criptomonedas bloqueados en un contrato inteligente que permiten el intercambio automático entre tokens y pagan comisiones a quienes aportan esos fondos.",
+      cat: "base",
+      tagLabel: "Fundamentos"
+    },
+    {
+      term: "Colateral",
+      def: "Activo que se deposita como garantía para poder pedir un préstamo dentro de un protocolo DeFi.",
+      cat: "riesgo",
+      tagLabel: "Riesgo"
+    },
+    {
+      term: "Sobrecolateralizada",
+      def: "Situación en la que el valor del colateral es mayor que el valor del préstamo, para reducir el riesgo de liquidación.",
+      cat: "riesgo",
+      tagLabel: "Riesgo"
+    },
+    {
+      term: "Liquidation (liquidación)",
+      def: "Cierre forzoso de una posición de deuda cuando el valor del colateral baja demasiado y ya no cubre el préstamo.",
+      cat: "riesgo",
+      tagLabel: "Riesgo"
+    },
+    {
+      term: "LTV (Loan to Value)",
+      def: "Porcentaje que indica cuánto se ha pedido prestado respecto al valor del colateral, y que sirve para medir el riesgo de liquidación.",
+      cat: "riesgo",
+      tagLabel: "Riesgo"
+    },
+    {
+      term: "Oráculo",
+      def: "Sistema que envía datos del mundo exterior (por ejemplo precios) a los contratos inteligentes en la blockchain.",
+      cat: "tecnico",
+      tagLabel: "Técnico"
+    },
+    {
+      term: "ERC-20",
+      def: "Estándar técnico de Ethereum para crear tokens fungibles que pueden interactuar fácilmente con wallets y aplicaciones de esa red.",
+      cat: "tecnico",
+      tagLabel: "Técnico"
+    },
+    {
+      term: "Facilitator",
+      def: "Rol o entidad dentro de un protocolo que ayuda a ejecutar funciones específicas (como gestionar posiciones o liquidez), siguiendo las reglas del sistema.",
+      cat: "tecnico",
+      tagLabel: "Técnico"
+    },
+    {
+      term: "Stablecoin",
+      def: "Criptomoneda diseñada para mantener un precio estable, normalmente vinculado a una moneda fiat como el dólar.",
+      cat: "tokens",
+      tagLabel: "Tokens"
+    },
+    {
+      term: "Mint",
+      def: "Proceso de crear o emitir nuevos tokens y registrarlos en la blockchain.",
+      cat: "tokens",
+      tagLabel: "Tokens"
+    },
+    {
+      term: "Quemar (burn)",
+      def: "Enviar tokens a una dirección inaccesible para sacarlos permanentemente de circulación y reducir la oferta.",
+      cat: "tokens",
+      tagLabel: "Tokens"
+    },
+    {
+      term: "Staking",
+      def: "Bloquear tokens en una red o protocolo para ayudar a asegurarla o participar en ella y recibir recompensas.",
+      cat: "tokens",
+      tagLabel: "Tokens"
+    },
+    {
+      term: "Gobernanza",
+      def: "Mecanismo mediante el cual los poseedores de ciertos tokens pueden proponer y votar cambios en un protocolo.",
+      cat: "gov",
+      tagLabel: "Gobernanza"
+    },
+    {
+      term: "DAO",
+      def: "Organización autónoma descentralizada que se gobierna mediante reglas en contratos inteligentes y decisiones votadas con tokens.",
+      cat: "gov",
+      tagLabel: "Gobernanza"
+    },
+    {
+      term: "Poder de voto",
+      def: "Grado de influencia que tiene un usuario en las decisiones de gobernanza, normalmente proporcional a la cantidad de tokens que posee o delega.",
+      cat: "gov",
+      tagLabel: "Gobernanza"
+    }
+  ];
+
+  var grid     = document.getElementById("grid");
+  var empty    = document.getElementById("empty");
+  var searchEl = document.getElementById("search");
+  var countNum = document.getElementById("count-num");
+  var countBar = document.getElementById("count-bar");
+  var activeCat = "all";
+  var query     = "";
+
+  function tagClass(cat) {
+    return "card-tag tag--" + cat;
+  }
+
+  function escape(str) {
+    return str.replace(/[&<>"']/g, function(c) {
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  function highlight(text, q) {
+    if (!q) return escape(text);
+    var re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + ")", "gi");
+    return escape(text).replace(re, "<mark>$1</mark>");
+  }
+
+  function render() {
+    var filtered = terms.filter(function(t) {
+      var matchCat = activeCat === "all" || t.cat === activeCat;
+      var q = query.toLowerCase();
+      var matchQ = !q ||
+        t.term.toLowerCase().includes(q) ||
+        t.def.toLowerCase().includes(q);
+      return matchCat && matchQ;
+    });
+
+    /* eliminar tarjetas previas */
+    Array.prototype.slice.call(grid.querySelectorAll(".card")).forEach(function(c){
+      grid.removeChild(c);
+    });
+
+    var q = query;
+    filtered.forEach(function(t) {
+      var card = document.createElement("article");
+      card.className = "card";
+      card.setAttribute("role", "listitem");
+      card.setAttribute("data-cat", t.cat);
+      card.innerHTML =
+        '<div class="card-top">' +
+          '<h2>' + highlight(t.term, q) + '</h2>' +
+          '<span class="' + tagClass(t.cat) + '">' + t.tagLabel + '</span>' +
+        '</div>' +
+        '<p>' + highlight(t.def, q) + '</p>';
+      grid.insertBefore(card, empty);
+    });
+
+    var n = filtered.length;
+    countNum.textContent = String(n);
+    countBar.innerHTML = "<strong id='count-num'>" + n + "</strong> término" + (n === 1 ? "" : "s") +
+      (activeCat !== "all" || q ? " encontrado" + (n === 1 ? "" : "s") : "");
+
+    if (n === 0) {
+      empty.style.display = "flex";
+    } else {
+      empty.style.display = "none";
+    }
+  }
+
+  /* Filtros */
+  document.getElementById("filters").addEventListener("click", function(e) {
+    var btn = e.target.closest(".filter-btn");
+    if (!btn) return;
+    activeCat = btn.dataset.cat;
+    document.querySelectorAll(".filter-btn").forEach(function(b) {
+      b.classList.toggle("active", b === btn);
+    });
+    render();
+  });
+
+  /* Búsqueda */
+  searchEl.addEventListener("input", function() {
+    query = searchEl.value.trim();
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
