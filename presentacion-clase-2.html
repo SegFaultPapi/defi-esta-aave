@@ -552,11 +552,23 @@
     </div>
     <p class="kicker">Segunda clase</p>
     <h1>Aave V3: práctica e implementación</h1>
-    <p class="lede">Interacción con contratos para principiantes.</p>
+    <p class="lede">Interacción práctica con contratos en Aave V3.</p>
     <p class="subtitle">Leer, aprobar, depositar, pedir prestado, repagar y retirar.</p>
   </section>
 
-  <section class="slide slide--speaker" id="slide-2" aria-hidden="true" aria-label="Diapositiva 2">
+  <section class="slide" id="slide-2" aria-hidden="true" aria-label="Diapositiva 2">
+    <p class="kicker">Objetivos</p>
+    <h2>Objetivos de la sesión</h2>
+    <p class="lede">Al final de esta clase, el estudiante podrá:</p>
+    <ul>
+      <li>Entender qué contrato toca primero para interactuar con Aave V3: <strong>Pool</strong>.</li>
+      <li>Reconocer el flujo práctico de <strong>approve → supply → borrow → repay → withdraw</strong>.</li>
+      <li>Implementar un <strong>contrato mínimo</strong> que encapsule interacciones básicas.</li>
+      <li>Entender cómo <strong>mintear GHO</strong> usando el flujo de borrow sobre el Aave V3 Ethereum Market.</li>
+    </ul>
+  </section>
+
+  <section class="slide slide--speaker" id="slide-3" aria-hidden="true" aria-label="Diapositiva 3">
     <p class="kicker">Presentación</p>
     <div class="speaker-card">
       <div class="speaker-avatar">
@@ -582,18 +594,6 @@
     </div>
   </section>
 
-  <section class="slide" id="slide-3" aria-hidden="true" aria-label="Diapositiva 3">
-    <p class="kicker">Objetivos</p>
-    <h2>Objetivos de la sesión</h2>
-    <p class="lede">Al final de esta clase, el estudiante podrá:</p>
-    <ul>
-      <li>Entender qué contrato toca primero para interactuar con Aave V3: <strong>Pool</strong>.</li>
-      <li>Reconocer el flujo práctico de <strong>approve → supply → borrow → repay → withdraw</strong>.</li>
-      <li>Implementar un <strong>contrato mínimo</strong> que encapsule interacciones básicas.</li>
-      <li>Entender cómo <strong>mintear GHO</strong> usando el flujo de borrow sobre el Aave V3 Ethereum Market.</li>
-    </ul>
-  </section>
-
   <section class="slide" id="slide-4" aria-hidden="true" aria-label="Diapositiva 4">
     <p class="kicker">Agenda</p>
     <h2>Qué haremos hoy</h2>
@@ -602,7 +602,7 @@
       <li>Identificar <strong>contratos y direcciones</strong> correctas del mercado.</li>
       <li>Revisar <strong>interfaces mínimas</strong> en Solidity.</li>
       <li>Implementar <strong>funciones básicas</strong> de interacción.</li>
-      <li>Probar el <strong>flujo completo</strong> con un ejemplo sencillo para principiantes.</li>
+      <li>Probar el <strong>flujo completo</strong> con un ejemplo práctico de punta a punta.</li>
     </ul>
   </section>
 
@@ -617,13 +617,13 @@
       <li><strong>ERC-20 del activo subyacente</strong> — para <code>approve</code> y balances.</li>
       <li><strong>Opcional:</strong> contratos o datos auxiliares para leer estado del usuario y del mercado.</li>
     </ul>
-    <p class="callout"><strong>Nota para clase:</strong> no hardcodear direcciones sin verificarlas en documentación oficial o en el registro del mercado.</p>
+    <p class="callout"><strong>Nota importante:</strong> no hardcodear direcciones sin verificarlas en documentación oficial o en el registro del mercado.</p>
   </section>
 
   <section class="slide" id="slide-6" aria-hidden="true" aria-label="Diapositiva 6">
     <p class="kicker">Mental model</p>
     <h2>El flujo mental del desarrollador</h2>
-    <p class="lede">Antes de escribir código, el alumno debe pensar así:</p>
+    <p class="lede">Antes de escribir código, conviene pensar en este orden:</p>
     <ul>
       <li>¿Qué <strong>mercado</strong> voy a usar?</li>
       <li>¿Cómo obtengo el <strong>Pool</strong> correcto?</li>
@@ -633,7 +633,7 @@
     </ul>
     <blockquote class="docente">
       «En DeFi, primero resuelves direcciones y permisos; luego ejecutas lógica.»
-      <cite>Mensaje docente</cite>
+      <cite>Idea clave</cite>
     </blockquote>
   </section>
 
@@ -641,7 +641,7 @@
     <p class="kicker">Pool</p>
     <h2>Descubrir el Pool correctamente</h2>
     <p class="lede">La forma recomendada es obtener el Pool desde <strong>PoolAddressesProvider</strong>.</p>
-    <h3>Qué explicar</h3>
+    <h3>Puntos clave</h3>
     <ul>
       <li><strong>PoolAddressesProvider</strong> es el registro de direcciones del protocolo para un mercado concreto.</li>
       <li>El <strong>Pool</strong> es un proxy y su dirección operativa debe resolverse desde el provider del mercado.</li>
@@ -715,7 +715,7 @@
 
   <section class="slide" id="slide-9" aria-hidden="true" aria-label="Diapositiva 9">
     <p class="kicker">Solidity</p>
-    <h2>Interfaces mínimas para principiantes</h2>
+    <h2>Interfaces mínimas para la práctica</h2>
     <p class="lede">Interfaces que sí vale la pena enseñar en una primera práctica:</p>
     <ul>
       <li><strong>IERC20</strong> con <code>approve</code>, <code>balanceOf</code> y <code>transferFrom</code> (conceptualmente).</li>
@@ -770,7 +770,7 @@
     <p class="kicker">Permisos</p>
     <h2>Primer paso: approve</h2>
     <p class="lede">Antes de hacer <strong>supply</strong> o <strong>repay</strong>, el token ERC-20 debe dar permiso al Pool para mover fondos.</p>
-    <h3>Qué remarcar</h3>
+    <h3>Puntos clave</h3>
     <ul>
       <li><code>approve(pool, amount)</code> se hace en el <strong>token</strong>, no en Aave.</li>
       <li>Sin <strong>allowance</strong> suficiente, <code>supply</code> y <code>repay</code> fallan.</li>
@@ -790,7 +790,7 @@
     </ul>
     <blockquote class="docente">
       «Supply es el punto de entrada más simple para entender Aave.»
-      <cite>Mensaje docente</cite>
+      <cite>Idea clave</cite>
     </blockquote>
   </section>
 
@@ -844,11 +844,11 @@
     <p class="kicker">Borrow</p>
     <h2>Borrow: segunda interacción real</h2>
     <p class="lede">Después de depositar y usar ese activo como colateral, el usuario puede pedir prestado otro activo.</p>
-    <h3>Qué explicar</h3>
+    <h3>Puntos clave</h3>
     <ul>
       <li><code>borrow</code> exige una posición <strong>suficientemente colateralizada</strong>.</li>
       <li>Al pedir prestado, el usuario recibe el activo y se crean <strong>debt tokens</strong> que representan la deuda.</li>
-      <li>Para principiantes, basta con entender que <code>interestRateMode</code> define el tipo de deuda soportado por el mercado.</li>
+      <li><code>interestRateMode</code> define el tipo de deuda soportado por el mercado.</li>
     </ul>
   </section>
 
@@ -869,7 +869,7 @@
     <p class="kicker">Withdraw</p>
     <h2>Withdraw: recuperar el depósito</h2>
     <p class="lede">El usuario puede retirar su depósito solo si hay liquidez disponible y si su posición sigue siendo segura tras el retiro.</p>
-    <h3>Qué enseñar</h3>
+    <h3>Puntos clave</h3>
     <ul>
       <li><code>withdraw</code> redime <strong>aTokens</strong> por el activo subyacente.</li>
       <li>No todo depósito es inmediatamente retirable si todavía respalda una <strong>deuda activa</strong>.</li>
@@ -879,7 +879,7 @@
 
   <section class="slide" id="slide-17" aria-hidden="true" aria-label="Diapositiva 17">
     <p class="kicker">Wrapper</p>
-    <h2>Wrapper mínimo para principiantes</h2>
+    <h2>Wrapper mínimo para la práctica</h2>
     <p class="lede">Propón un contrato <strong>educativo, no productivo</strong>, con cuatro métodos:</p>
     <ul>
       <li><code>deposit(asset, amount)</code></li>
@@ -887,7 +887,7 @@
       <li><code>repay(asset, amount, rateMode)</code></li>
       <li><code>withdraw(asset, amount)</code></li>
     </ul>
-    <p class="callout"><strong>Objetivo pedagógico:</strong> encapsular el flujo básico sin entrar todavía en optimizaciones, permisos avanzados o manejo complejo de errores.</p>
+    <p class="callout"><strong>Objetivo de esta versión:</strong> encapsular el flujo básico sin entrar todavía en optimizaciones, permisos avanzados o manejo complejo de errores.</p>
   </section>
 
   <section class="slide slide--scroll slide--code" id="slide-18" aria-hidden="true" aria-label="Diapositiva 18">
@@ -925,7 +925,7 @@
     pool.<span class="sol-call">supply</span>(asset, amount, <span class="sol-global">msg</span>.sender, <span class="sol-num">0</span>);
 }</code></pre>
     </div>
-    <h3>Qué explicar</h3>
+    <h3>Puntos clave</h3>
     <ul>
       <li>El contrato recibe tokens del usuario con <code>transferFrom</code>.</li>
       <li>Luego da permiso al Pool.</li>
@@ -946,7 +946,7 @@
     pool.<span class="sol-call">borrow</span>(asset, amount, rateMode, <span class="sol-num">0</span>, <span class="sol-global">msg</span>.sender);
 }</code></pre>
     </div>
-    <h3>Qué decir</h3>
+    <h3>Puntos clave</h3>
     <ul>
       <li><code>borrow</code> no necesita <code>approve</code> porque el usuario está <strong>recibiendo</strong> fondos, no entregándolos.</li>
       <li>Pero sí exige <strong>colateral suficiente</strong> y configuración compatible del mercado.</li>
@@ -968,7 +968,7 @@
     pool.<span class="sol-call">repay</span>(asset, amount, rateMode, <span class="sol-global">msg</span>.sender);
 }</code></pre>
     </div>
-    <h3>Qué enseñar</h3>
+    <h3>Puntos clave</h3>
     <ul>
       <li>El patrón es muy parecido a <strong>deposit</strong>.</li>
       <li>La diferencia es que aquí no se mintean aTokens; se <strong>reduce deuda</strong> y se queman debt tokens equivalentes.</li>
@@ -994,8 +994,8 @@
   <section class="slide" id="slide-23" aria-hidden="true" aria-label="Diapositiva 23">
     <p class="kicker">GHO</p>
     <h2>GHO en la práctica</h2>
-    <p class="lede">Para un principiante, GHO se enseña como un <strong>caso especial de borrow</strong>.</p>
-    <h3>Qué explicar</h3>
+    <p class="lede">GHO se entiende como un <strong>caso especial de borrow</strong>.</p>
+    <h3>Puntos clave</h3>
     <ul>
       <li>En el <strong>Aave V3 Ethereum Market</strong>, mintear GHO ocurre mediante la función <code>borrow</code>.</li>
       <li>Primero se suministra <strong>colateral elegible</strong>.</li>
@@ -1003,7 +1003,7 @@
     </ul>
     <blockquote class="docente">
       «Mintear GHO, desde la perspectiva del integrador, se parece mucho a pedir prestado un activo en Aave.»
-      <cite>Mensaje docente</cite>
+      <cite>Idea clave</cite>
     </blockquote>
   </section>
 
@@ -1061,7 +1061,7 @@
   <section class="slide" id="slide-25" aria-hidden="true" aria-label="Diapositiva 25">
     <p class="kicker">Taller</p>
     <h2>Ejercicio práctico guiado</h2>
-    <p class="lede">Caso simple para demo:</p>
+    <p class="lede">Caso simple de práctica:</p>
     <ol>
       <li>Depositar <strong>WETH</strong> o un token de prueba compatible.</li>
       <li>Verificar que el usuario recibe <strong>aTokens</strong>.</li>
@@ -1073,7 +1073,7 @@
 
   <section class="slide slide--scroll" id="slide-26" aria-hidden="true" aria-label="Diapositiva 26">
     <p class="kicker">Errores</p>
-    <h2>Errores comunes del principiante</h2>
+    <h2>Errores comunes en la implementación</h2>
     <ul>
       <li>Usar una dirección de <strong>Pool incorrecta</strong> en lugar de resolverla desde PoolAddressesProvider.</li>
       <li><strong>Olvidar approve</strong> antes de supply o repay.</li>
@@ -1084,7 +1084,7 @@
 
   <section class="slide" id="slide-27" aria-hidden="true" aria-label="Diapositiva 27">
     <p class="kicker">Checklist</p>
-    <h2>Qué debe implementar el alumno</h2>
+    <h2>Qué debes implementar</h2>
     <p class="lede">Checklist de la segunda clase:</p>
     <ul>
       <li>Interfaz mínima de <strong>IPool</strong>.</li>
@@ -1102,7 +1102,7 @@
     <h2>Qué debe recordar hoy</h2>
     <ul>
       <li><strong>Pool</strong> es el contrato principal para casi toda interacción del usuario.</li>
-      <li>El flujo básico para principiantes es: <strong>approve → supply → borrow → repay → withdraw</strong>.</li>
+      <li>El flujo básico es: <strong>approve → supply → borrow → repay → withdraw</strong>.</li>
       <li><strong>PoolAddressesProvider</strong> ayuda a encontrar la dirección correcta del Pool.</li>
       <li><strong>GHO</strong> se puede enseñar como un caso práctico de borrow sobre Aave V3 Ethereum Market.</li>
     </ul>
