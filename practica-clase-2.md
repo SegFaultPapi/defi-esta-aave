@@ -129,27 +129,78 @@ contract AaveBasicInteractor {
 }
 ```
 
+## Direcciones de referencia — Base Sepolia (Aave V3)
+
+La testnet actual de Base es **Base Sepolia** (chain id **84532**). Las direcciones siguientes provienen del [aave-address-book de BGD Labs](https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3BaseSepolia.sol) (convención: verificar en el repo si hubiera un redeploy).
+
+| Qué es | Dirección |
+|--------|-----------|
+| `PoolAddressesProvider` (argumento del constructor) | `0xE4C23309117Aa30342BFaae6c95c6478e0A4Ad00` |
+| `Pool` (comprobación: `pool()` en tu wrapper o `getPool()` en el provider) | `0x8bAB6d1b75f19e9eD9fCe8b9BD338844fF79aE27` |
+| WETH subyacente | `0x4200000000000000000000000000000000000006` |
+| USDC subyacente (6 decimales) | `0xba50Cd2A20f6DA35D788639E581bca8d0B5d4D5f` |
+
+**ETH nativo → WETH:** el `deposit` del práctico usa el **contrato ERC-20 WETH**. Si solo tienes ETH, en el contrato WETH llama a **`deposit()`** enviando **value** en wei en la misma transacción para recibir WETH.
+
+**Fuentes de verdad para otras redes:** archivos `AaveV3<Red>.sol` en el mismo repositorio (`POOL_ADDRESSES_PROVIDER`).
+
+---
+
 ## Flujo de práctica sugerido (paso a paso)
 
 1. **Elegir market y provider**
-   - Selecciona red + market (por ejemplo, *Aave V3 Ethereum Market*).
-   - Obtén la dirección del `PoolAddressesProvider` para esa red/market (docs oficiales).
+   - Selecciona red + market (por ejemplo, *Aave V3 Ethereum* o *Aave V3 Base Sepolia*).
+   - Usa el `PoolAddressesProvider` de **esa misma red** (tabla anterior para Base Sepolia; [address book](https://github.com/bgd-labs/aave-address-book/tree/main/src) para el resto).
 2. **Deploy**
    - Despliega `AaveBasicInteractor(provider)`.
-3. **Supply**
-   - En la UI o en un script, haz `approve(token, wrapper, amount)` (al wrapper) si vas a usar `transferFrom` hacia el wrapper.
-   - Llama a `deposit(asset, amount)`.
+   - Anota la dirección del contrato desplegado: es tu **wrapper**.
+3. **Supply (`deposit`)**
+   - El `approve` **no** se hace “al wrapper como contrato que expone approve”: se llama **`approve` en el contrato del token** (WETH, USDC, …).
+   - Parámetros: `spender` = dirección del **wrapper**; `amount` ≥ cantidad que pasarás a `deposit` (mismas unidades mínimas del token).
+   - Luego `deposit(asset, amount)` desde la **misma cuenta** que firmó el `approve`.
 4. **Borrow**
    - Llama a `borrow(assetToBorrow, amount, rateMode)`.
-   - **GHO**: si la reserva existe y tu colateral lo permite, `assetToBorrow = GHO`.
+   - En muchos mercados, modo variable = **`2`** (`interestRateMode`).
+   - **GHO**: solo en mercados donde exista la reserva GHO y tu colateral lo permita (en Base Sepolia puede no aplicar igual que en mainnet).
 5. **Repay**
-   - Haz `approve(tokenBorrowed, wrapper, amount)` y luego `repay(assetBorrowed, amount, rateMode)`.
+   - Otra vez: `approve` del **token adeudado** al **wrapper**, luego `repay(assetBorrowed, amount, rateMode)`.
 6. **Withdraw**
-   - Intenta `withdraw(assetSupplied, amount)` (si el HF y la liquidez lo permiten).
+   - `withdraw(assetSupplied, amount)` si el HF y la liquidez lo permiten.
+
+---
+
+## Pruebas con Remix IDE (Base Sepolia)
+
+1. **Red y wallet:** MetaMask (u otra wallet) en **Base Sepolia**; ETH de faucet para gas.
+2. **Remix:** [remix.ethereum.org](https://remix.ethereum.org) → **Deploy & run** → **Injected Provider**. Comprueba que Remix muestra la red correcta.
+3. **Compilar** `AaveBasicInteractor.sol` (compilador acorde a `^0.8.20`).
+4. **Deploy** del contrato con el constructor: `0xE4C23309117Aa30342BFaae6c95c6478e0A4Ad00` (Base Sepolia).
+5. **`approve` al wrapper desde Remix**
+   - Compila una interfaz mínima con `function approve(address,uint256) external returns (bool);`.
+   - **At Address** con la dirección del **token** (no del wrapper).
+   - Llama `approve(spender, amount)` con `spender` = dirección del **wrapper** desplegado.
+6. **Argumentos `uint256`:** Remix/ethers no aceptan decimales. `amount` = entero en unidad mínima del token:  
+   `cantidad_en_tokens × 10^decimales` (WETH 18, USDC en esta red 6).
+
+La **Remix VM** no tiene Aave desplegado; para tocar el Pool real necesitas **testnet/mainnet** con Injected Provider.
+
+---
 
 ## Errores típicos
 
 - Usar una dirección de `Pool` hardcodeada en vez de resolverla desde `PoolAddressesProvider`.
-- Olvidar `approve` antes de `deposit` o `repay`.
-- Intentar `withdraw` cuando todavía sostienes deuda (o el HF quedaría < 1).
+- Olvidar `approve` en el **token** antes de `deposit` o `repay`, o poner como `spender` una dirección que no es el **wrapper actual**.
+- **Volver a desplegar** el wrapper y seguir usando el `approve` viejo (cada deploy tiene dirección nueva).
+- Pasar **`0.00001`** u otra cadena con punto en Remix para un `uint256` → usar solo el **entero** en unidades mínimas.
+- Intentar `withdraw` cuando todavía sostienes deuda (o el health factor quedaría por debajo de 1).
+
+### Depuración en el explorador (p. ej. Basescan)
+
+- **`status: 0` / execution failed** con **poco gas usado** (~decenas de miles): suele ser revierte **temprana**, muy a menudo `transferFrom failed` (saldo o `allowance` insuficiente, o `spender` incorrecto).
+- **`logs: []`** en una tx fallida es coherente con revert antes de emitir eventos del Pool.
+- Comprueba en el contrato del token: `balanceOf(tu_cuenta)` y `allowance(tu_cuenta, wrapper)`.
+
+### Error de wallet / RPC (`BAD_DATA`, `result: null`, hash inválido)
+
+Suele ser **respuesta vacía del RPC** o glitch de la extensión, no el contrato. Prueba: otro **RPC URL** de Base Sepolia en la wallet, recargar Remix, desconectar y volver a conectar la wallet, revisar si la transacción aparece igual en la actividad de MetaMask.
 
